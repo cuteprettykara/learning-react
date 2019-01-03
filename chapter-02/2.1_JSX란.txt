@@ -1,0 +1,17 @@
+파일들을 불러오는 것은 webpack의 로더(loader)가 담당합니다.
+[로더의 종류]
+* css-loader
+* file-loader
+* babel-loader
+
+JSX란?
+자바스크립트의 [확장] 문법.
+나중에 코드가 번들링되면서 babel-loader(babel-preset-react)를 사용하여 
+자바스크립트로(React.createElement) 변환합니다.
+
+JSX는 리액트용이기 때문에 공식 자바스크립트 문법은 아닙니다.
+
+JSX의 장점
+* 보기 쉽고 익숙하다(HTML과 비슷)
+* 오류 검사(바벨이 코드를 변환하는 과정에서 감지해 냅니다.)
+* 높은 활용도
