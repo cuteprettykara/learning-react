@@ -1,0 +1,22 @@
+[node.js 설치]
+
+[yarn 설치]
+1. https://yarnpkg.com/lang/en/ 에서 [instal yarn] 클릭하여 download후 설치.
+2. 버전 확인 : > yarn --version 
+
+[VS Code 설치]
+[VS Code 확장프로그램 설치]
+
+* ESLint
+* Relative Path : 상대경로에 있는 파일 경로를 펀안하게 작성할 수 있는 도구입니다.
+* Guides        : 들여쓰기 가이드라인을 그려 줍니다
+* Reactjs code snippets(제작자: charalampos karypidis인 것을 설치)
+
+[Git 설치]
+
+[create-react-app 설치]
+> yarn global add create-react-app  # 또는 npm -g install create-react-app
+
+[hello-react 프로젝트 생성]
+> cd hello-react
+> yarn start    # 개발서버 실행(파일을 수정할 때마다 프로젝트를 다시 빌드하고, 브라우저를 리로딩)
