@@ -1,0 +1,55 @@
+[이벤트를 사용할 때 주의 사항]
+1.  이벤트 이름은 camelCase로 작성합니다.
+    ex) onclick => onClick, onkeyup => onkeyup
+
+2.  이벤트 핸들러는 함수만 가능합니다.
+    HTML의 속성에 이벤트를 설정할 때는 큰 따옴표 안에 실행할 코드를 넣었지만,
+    리액트에서는 함수 형태의 객체를 전달합니다.
+    * 방법 1: 익명 함수를 전달
+    * 방법 2: 미리 준비한 함수를 전달 => 가독성이 훨씬 높다.
+              => 컴포넌트에 임의 메소드를 만들면 this에 접근할 수 없다 
+              => constructor에서 binding 필요
+
+        constructor(props) {
+            super(props);
+            this.handleChange = this.handleChange.bind(this);
+        }
+
+        handleChange(e) {
+            this.setState({
+                message: e.target.value
+            });
+        }
+
+    * 방법 3: 미리 준비한 함수를 전달
+              => 방법 2는 새 메소드를 만들 때마다 constructor도 수정해야 하는 불편함이 있다.
+              => 화살표 함수를 사용하면 binding할 필요가 없다.
+
+        handleChange = e => {
+            this.setState({
+                message: e.target.value
+        });
+    }
+
+
+3.  DOM 요소에만 이벤트를 설정할 수 있습니다.
+    우리가 직접 만든 컴포넌트에는 이벤트를 자체적으로 설정할 수 없습니다.
+
+    ex) 다음과 같이 MyComponent에 onClick 이벤트를 설정한다면
+    * MyComponent를 클릭할 때 doSomething 함수를 실행하는 것이 아니라,
+    * 그냥 이름이 onClick인 props를 MyComponent에게 전달해줄 뿐입니다.
+
+        <MyComponent onClick={doSometing}/>
+
+    * 따라서 컴포넌트에 자체적으로 이벤트를 설정할 수는 없습니다. 하지만 
+      전달받은 props를 컴포넌트 내부의 DOM 이벤트로 설정할 수는 있죠.
+
+        <div onClick={this.props.onClick}>
+            { /* ... */ }
+        </div>
+
+[이벤트의 종류]
+https://reactjs.org/docs/events.html
+
+
+이벤트
