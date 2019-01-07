@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ValidationSample from './ValidationSample';
+import ValidationSample from './ValidationSample.1';
 
 class App extends Component {
   render() {
