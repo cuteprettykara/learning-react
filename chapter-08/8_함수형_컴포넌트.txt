@@ -1,0 +1,54 @@
+● 리액트에서 컴포넌트는 class 문법을 사용하여 정의합니다.
+  import React, { Component } from 'react';
+
+  class Hello extends Component {
+    render() {
+      return (
+        <div>Hello {this.props.name}</div>
+      );
+    }
+  }
+
+  export default Hello;
+
+
+● 라이프사이클 API와 state를 사용할 필요가 없고,
+● 오로지 props를 전달받아 뷰를 렌더링하는 역할만 한다면
+
+  컴포넌트를 더 간단하게 선언할 수 있습니다.
+  import React from 'react';
+
+  function Hello(props) {
+    return (
+      <div>Hello {props.name}</div>
+    );
+  }
+
+  export default Hello;
+
+● ES6의 화살표 함수와 구조분해를 사용하면 다음처럼 선언할 수 있습니다.
+  import React from 'react';
+
+  const Hello = ({name}) => {
+    return (
+      <div>Hello {name}</div>
+    );
+  };
+
+  export default Hello;
+
+● 더 간단히!
+  import React from 'react';
+
+  const Hello = ({name}) => (
+    <div>Hello {name}</div>
+  )
+
+  export default Hello;
+
+● 함수형 컴포넌트는 라이프사이클, state 등 불필요한 기능을 제거한 상태이기 때문에
+  메모리 소모량은 일반 클래스형 컴포넌트보다 적습니다.
+
+● 리액트 v16 이상에서는 함수형 컴포넌트 성능이 클래스형 컴포넌트보다 조금 더 빠릅니다.
+
+● 리액트 프로젝트에서는 state를 사용하는 컴포넌트 개수를 최소화하면 좋습니다.
