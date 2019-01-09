@@ -7,3 +7,33 @@
 ● 패키지 설치 
   $ yarn add styled-components
 
+● ES6 Tagged Template Literals 문법을 사용합니다.
+  이 문법을 사용하는 이유는 스타일링을 할 때 props에 접근하기 위해서입니다.
+  * Tagged Template Literals 문법을 사용하지 않으면 함수가 문자열 자체로 들어갑니다.
+  * Tagged Template Literals 문법을 사용하면 함수가 함수 형태 그대로 전달됩니다.
+  import styled from 'styled-components';
+
+  const Wrapper = styled.div`
+    border: 1px solid black;
+    display: inline-block;
+    padding: 1rem;
+    border-radius: 3px;
+    font-size: ${(props => props.fontSize)};
+    &:hover {
+      background: black;
+      color: white;
+    }
+  `;
+
+  const StyledButton = ({children, ...rest}) => {
+    return (
+      <Wrapper fontSize="1.25rem" {...rest}>
+        {children}
+      </Wrapper>
+    );
+  };
+
+● styled-components의 최대 장점은 자바스크립트 내부에서 스타일을 정의하기 때문에,
+  자바스크립트와 스타일 사이의 벽이 허물어져서, 동적 스타일링이 더욱 편해진다는 것입니다.
+
+● 참고 사이트 : https://www.styled-components.com/
