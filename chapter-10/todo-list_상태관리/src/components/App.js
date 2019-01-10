@@ -72,15 +72,25 @@ class App extends Component {
     })
   }
 
+  handleRemove = (id) => {
+    const { todos, input } = this.state;
+    
+    const newTodos = todos.filter(todo => todo.id !== id);
+    this.setState({
+      input: input,
+      todos: newTodos
+    })
+  }
+
   render() {
     const { input, todos } = this.state;
-    const { handleChange, handleInsert, handleToggle} = this;
+    const { handleChange, handleInsert, handleToggle, handleRemove} = this;
 
     return (
       <div>
         <PageTemplate>
           <TodoInput onChage={handleChange} value={input} onInsert={handleInsert} />
-          <TodoList todos={todos} onToggle={handleToggle} />
+          <TodoList todos={todos} onToggle={handleToggle} onRemove={handleRemove} />
         </PageTemplate>
       </div>
     );
