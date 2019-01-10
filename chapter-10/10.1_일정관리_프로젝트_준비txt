@@ -1,0 +1,70 @@
+● 일정관리 웹 애플리케이션 생성
+  1.프로젝트 생성
+    $ create-react-app todo-list
+
+  2.src/ 아래의 index.js와 serviceWorker.js만 남기고 모두 삭제.
+
+  3.classnames, Sass 패키지 설치
+    $ yarn add classnames node-sass
+
+  4.styles 디렉토리 정의: ?
+
+  5.open-color 적용
+    $ yarn add open-color
+
+    그리고 src/styles 디렉토리에 _utils.scss 파일을 만들어 open-color 라이브러리를 불러오세요.
+    @import '~open-color/open-color';
+
+  6.메인 스타일 설정
+    [src/styles/main.scss]
+    @import 'utils';
+
+    body {
+      background: $oc-gray-1;
+      margin: 0px;
+    }
+
+  7.index.js 수정
+    ...
+    import './styles/main.scss';
+    import App from './components/App';
+    ...
+
+  8. App 컴포넌트 생성
+    [src/components/App.js]
+    class App extends Component {
+      render() {
+        return (
+          <div>
+            일정관리
+          </div>
+        );
+      }
+    }
+
+  9.webpack 개발 서버 시작
+    $ yarn start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+● 
+
+
+
+
+
+● 
