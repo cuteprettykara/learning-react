@@ -40,15 +40,47 @@ class App extends Component {
     });
   }
 
+  handleToggle = (id) => {
+    const { todos, input } = this.state;
+
+    // 방법1
+/*     const newTodos = todos.map(todo => {
+      if (todo.id === id) 
+        return {
+          id: todo.id,
+          text: todo.text,
+          done: !todo.done
+        };
+
+      return todo;
+    }); */
+
+     // 방법2
+    const newTodos = todos.map(todo =>
+      (todo.id === id)
+      ?  {
+            id: todo.id,
+            text: todo.text,
+            done: !todo.done
+          }
+      : todo
+    );
+
+    this.setState({
+      input: input,
+      todos: newTodos
+    })
+  }
+
   render() {
     const { input, todos } = this.state;
-    const { handleChange, handleInsert} = this;
+    const { handleChange, handleInsert, handleToggle} = this;
 
     return (
       <div>
         <PageTemplate>
           <TodoInput onChage={handleChange} value={input} onInsert={handleInsert} />
-          <TodoList todos={todos} />
+          <TodoList todos={todos} onToggle={handleToggle} />
         </PageTemplate>
       </div>
     );
