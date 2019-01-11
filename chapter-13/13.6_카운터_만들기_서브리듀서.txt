@@ -1,0 +1,87 @@
+기존에 만든 리듀서는 색상과 숫자를 한 객체 안에 넣어서 관리하지요?
+
+이번에는 이 리듀서를 
+* 서브 리듀서 두 개의 파일로 분리한 후, 
+* combineReducers로 다시 합쳐 루트 리듀서를 만들겠습니다.
+
+1.[src/reducers/color.js]
+  import * as types from '../actions/ActionTypes';
+
+  const initialState = {
+    color: 'black'
+  };
+
+  const color = (state = initialState, action) => {
+    switch (action.type) {
+      case types.SET_COLOR:
+        return {
+          ...state,
+          color: action.color
+        }
+    
+      default:
+        return state;
+    }
+  };
+
+  export default color;
+
+2.[src/reducers/number.js]
+  import * as types from '../actions/ActionTypes';
+
+  const initialState = {
+    number: 0
+  };
+
+  const number = (state = initialState, action) => {
+    switch (action.type) {
+      case types.INCREMENT:
+        return {
+          ...state,
+          number: ++state.number
+        }
+
+      case types.DECREMENT:
+        return {
+          ...state,
+          number: --state.number
+        }
+    
+      default:
+        return state;
+    }
+  };
+
+  export default number;
+
+3.[src/reducers/index.js]
+  import color from './color';
+  import number from './number';
+  import { combineReducers } from 'redux';
+
+  /*
+    서브 리듀서들을 하나로 합칩니다.
+    combineReducers를 실행하고 나면, store 형태를
+    파라미터로 전달한 객체 모양대로 만듭니다.
+    {
+      numberData: {
+        number: 0
+      },
+      colorData: {
+        color: 'black'
+      }
+    }
+  */
+  const reducers = combineReducers({
+    numberData: number,
+    colorData: color
+  });
+
+  export default reducers;
+
+4. [src/containers/CounterCountainer.js]
+  ...
+  const mapStateToProps = (state) => ({
+    color: state.colorData.color,
+    number: state.numberData.number
+  });
