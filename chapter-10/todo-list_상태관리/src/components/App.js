@@ -19,7 +19,7 @@ class App extends Component {
     todos : initialTodos
   }
 
-  id = 1;
+  id = initialTodos.length-1;
   getId = () => ++this.id;
 
 
