@@ -1,0 +1,61 @@
+1.기존 컨테이너 컴포넌트인 CounterContainer는 삭제합니다.
+
+2.mapStateToProps로 리덕스 스토어에 있는 값들을 props로 전달하고,
+  mapDispatchToProps로 액션 생성 함수들을 연결시킵니다.
+
+  [src/containers/CounterListContainer.js]
+  import CounterList from '../components/CounterList';
+  ...
+  // store 안의 state 값을 props로 연결해줍니다.
+  const mapStateToProps = (state) => ({
+    counters: state.counters
+  });
+
+  const mapDispatchToProps = dispatch => ({
+    onIncrement: (index) => dispatch(actions.increment(index)),
+    onDecrement: (index) => dispatch(actions.decrement(index)),
+    onSetColor: (index) => {
+      const color = getRandomColor();
+      dispatch(actions.setColor({color, index}));
+    }
+  });
+
+  const CounterListCountainer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CounterList);
+
+  export default CounterListCountainer;
+
+3.랜덤 색상 생성함수는 다음에 수정할 App 컴포넌트에서도 사용합니다.
+  코드가 중복되므로 해당 함수는 lib 디렉토리에 따로 저장한 후 불러와 사용합니다.
+
+  [src/lib/getRandomColor.js]
+  // 13가지 색상 중 랜덤으로 선택하는 함수입니다
+  export default function getRandomColor() {
+    const colors = [
+        '#495057',
+        '#f03e3e',
+        '#d6336c',
+        '#ae3ec9',
+        '#7048e8',
+        '#4263eb',
+        '#1c7cd6',
+        '#1098ad',
+        '#0ca678',
+        '#37b24d',
+        '#74b816',
+        '#f59f00',
+        '#f76707'
+    ];
+
+    // 0부터 12까지 랜덤 숫자
+    const random = Math.floor(Math.random() * 13);
+
+    // 랜덤 색상 반환
+    return colors[random];
+  }
+
+4.CounterListCountainer.js를 다시 열어서 getRandomColor 함수를 제거하고, import해서 씁니다.
+  [src/containers/CounterListContainer.js]
+  import getRandomColor from '../lib/getRandomColor';

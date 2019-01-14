@@ -1,0 +1,5 @@
+1.크롬 웹 스토어에서 Redux DevTools를 설치
+2.개발자 도구 활성화 작업을 해야 작동합니다.
+  [src/index.js]
+  // 스토어 생성
+  const store = createStore(reducers, window.devToolsExtension && window.devToolsExtension());

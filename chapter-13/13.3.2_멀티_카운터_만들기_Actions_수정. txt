@@ -1,0 +1,35 @@
+1.액션 타입 수정
+
+export const CREATE = 'CREATE'; // 카운터를 추가
+export const REMOVE = 'REMOVE'; // 카운터를 제거
+
+2.액션 생성 함수 수정
+  특정 카운터를 조작할 수 있도록 index값을 액션 객체에 포함해야 합니다.
+  
+  [src/actions/index.js]
+  import * as types from './ActionTypes';
+
+  export const increment = (index) => ({
+    type: types.INCREMENT,
+    index
+  });
+
+  export const decrement = (index) => ({
+    type: types.DECREMENT,
+    index
+  });
+
+  export const setColor = ({color, index}) => ({
+    type: types.SET_COLOR,
+    color,
+    index
+  });
+
+  export const create = (color) => ({
+    type: types.CREATE,
+    color
+  });
+
+  export const remove = () => ({
+    type: types.REMOVE
+  });

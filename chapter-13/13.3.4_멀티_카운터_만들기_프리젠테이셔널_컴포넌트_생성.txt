@@ -1,0 +1,111 @@
+카운터 여러 개를 다룰 수 있도록
+  * 카운터 생성 및 제거를 담당하는 Buttons 컴포넌트와
+  * 카운터 여러 개를 렌더링할 ConterList를
+만들겠습니다.
+
+1.생성 및 제거 버튼 : Buttons 컴포넌트 생성
+  [src/components/Buttons.js]
+  import React from 'react';
+  import PropTypes from 'prop-types';
+
+
+  const Buttons = ({onCreate, onRemove}) => {
+    return (
+      <div className="Buttons">
+        <div className="btn add" onClick={onCreate}>생성</div>
+        <div className="btn remove" onClick={onRemove}>제거</div>
+      </div>
+    );
+  };
+
+  Buttons.propTypes = {
+    onCreate: PropTypes.func,
+    onRemove: PropTypes.func
+  };
+
+  Buttons.defaultProps = {
+    onCreate: () => console.warn('onCreate not defined'),
+    onRemove: () => console.warn('onRemove not defined')
+  }
+
+  export default Buttons;
+
+
+2.여러 카운터를 렌더링 : CounterList 컴포넌트 생성
+  [src/components/CounterList.js]
+  import React from 'react';
+  import PropTypes from 'prop-types';
+  import Counter from './Counter';
+
+  const CounterList = ({counters, onIncrement, onDecrement, onSetColor}) => {
+
+    const counterList = counters.map((counter, i) => 
+      <Counter 
+        key={i}
+        index={i}
+        {...counter}
+        onIncrement={onIncrement}
+        onDecrement={onDecrement}
+        onSetColor={onSetColor}
+      />
+    );
+
+    return (
+      <div>
+        {counterList}
+      </div>
+    );
+  };
+
+  CounterList.propTypes = {
+    counters: PropTypes.arrayOf(
+      PropTypes.shape({
+        color: PropTypes.string,
+        number: PropTypes.number
+      })
+    ),
+    onIncrement: PropTypes.func,
+    onDecrement: PropTypes.func,
+    onSetColor: PropTypes.func
+  };
+
+  CounterList.defaultProps = {
+    couners: []
+  }
+
+  export default CounterList;
+
+
+3.Counter 컴포넌트 수정
+  CounterList에서 전달받은 index를 각 이벤트를 실행할 때 함수의 파라미터로 넣어서
+  실행할 수 있게 합니다.
+  [src/components/Counter.js]
+  ...
+  const Counter = ({..., index, ...}) => {
+    return (
+      <div
+        ...
+        onClick={()=>onIncrement(index)}
+        onContextMenu={e => {
+          e.preventDefault();
+          onDecrement(index);
+        }}
+        onDoubleClick={()=>onSetColor(index)}
+        ...
+        >
+          {number}      
+      </div>
+    );
+  };
+
+  Counter.propTypes = {
+    index: PropTypes.number,
+    ...
+  };
+
+  Counter.defaultProps = {
+    index: 0,
+    ...
+  }
+
+  export default Counter;
