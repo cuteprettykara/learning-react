@@ -1,7 +1,7 @@
 ● react-redux 라이브러리의 connect 함수를 사용하여 컴포넌트를 스토어에 연결시킵니다.
 
 ● connect 함수의 파라미터
-  * mapStateToProps : state를 파라미터로 받아 컴포넌트의 props로 사용할 객체를 반환
+  * mapStateToProps : store.getState() 결과값인 state를 파라미터로 받아 컴포넌트의 props로 사용할 객체를 반환
   * mapDispatchToProps : dispatch를 파라미터로 받아 액션을 디스패치하는 함수들을 객체 안에 넣어서 반환
   * mergeProps: state와 dispatch가 동시에 필요한 함수를 props로 전달해야 할 때 사용.
 
