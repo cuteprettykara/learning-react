@@ -1,0 +1,59 @@
+[미들웨어란?]
+● 리덕스 미들웨어는 액션을 디스패치했을 때,
+  [리듀서에서 이를 처리하기 전에] 사전에 지정된 작업들을 실행합니다.
+
+● 미들웨어는 액션과 리듀서 사이의 중간자라고 볼 수 있습니다.
+
+● 미들웨어가 할 수 있는 작업들
+  * 전달받은 액션을 콘솔에 기록,
+  * 액션을 아예 취소하거나, 다른 종류의 액션을 추가로 디스패치
+
+
+[미들웨어 생성]
+● 준비작업
+  $ git clone https://github.com/vlpt-playground/redux-starter-kit
+  $ cd redux-starter-kit/
+  $ yarn
+
+  이 프로젝트는 create-react-app으로 만든 프로젝트에 Ducks 구조를 사용하여 리덕스를 적용한
+  단순한 프로젝트입니다.
+
+  * 간단한 숫자 카운터가 구현되어 있으며
+  * store 생성 로직은 store.js 파일로 분리했습니다.
+
+● 로거 미들웨어 생성
+  [src/lib/loggerMiddleware.js]
+  const loggerMiddleware = store => next => action => {
+    // 현재 스토어 상태 값 기록
+    console.log('현재 상태', store.getState());
+
+    // 액션 기록
+    console.log('액션', action);
+
+    // 액션을 다음 미들웨어 또는 리듀서로 넘깁니다.
+    const result = next(action);
+
+    // 액션 처리 후의 스토어 상태를 기록합니다.
+    console.log('다음 상태', store.getState());
+    console.log('\n');  // 비어 있는 줄 프린트
+
+    return result;  // 여기에서 반환하는 값은 store.dispatch(ACTION_TYPE)했을 때 결과로 설정합니다.
+  }
+
+  export default loggerMiddleware;
+
+● 미들웨어 적용
+  미들웨어는 스토어를 생성할 때 적용할 수 있습니다.
+  [src/store.js]
+  ...
+  import loggerMiddleware from './lib/loggerMidleware';
+
+  // 미들웨어가 여러 개일 때는 파라미터로 전달하면 됩니다. 예: applyMiddleware(a,b,c)
+  // 미들웨어 순서는 여기에서 전달한 파라미터 순서대로 지정합니다.
+
+  const store = createStore(modules, applyMiddleware(loggerMiddleware));
+
+  export default store;
+
+● 실행
+  $ yarn start
