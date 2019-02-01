@@ -1,0 +1,69 @@
+axios라는 Promise기반 HTTP 클라이언트 라이브러리르 사용하여 웹 요청을 하겠습니다.
+
+● Promise란?
+  * 숫자를 1초 뒤에 프린트하는 코드
+    function printLater(number) {
+      setTimeout(function() {
+        console.log(number);
+      }, 1000);
+    }
+
+    printLater(1);
+
+  * 1초 간격으로 숫자를 더해가면서 1,2,3,4를 프린트하는 코드
+    function printLater(number, fn) {
+      setTimeout(function() {
+        console.log(number);
+        if (fn) fn();
+      }, 1000);
+    }
+
+    // callback hell
+    printLater(1, function() {
+      printLater(2, function() {
+        printLater(3, function() {
+          printLater(4);
+        })
+      })
+    });
+
+  * 자바스크립트의 callback hell 문제를 해결해 주는 것이 바로 Promise입니다.
+    function printLater(number) {
+      return new Promise(resoleve => {  // 새 Promise를 만들어서 리턴합니다.
+        setTimeout(function() {
+          console.log(number);
+          resoleve();                   // promise가 끝났음을 알립니다.
+        }, 1000);
+      });
+    }
+
+    printLater(1)
+      .then(() => printLater(2))
+      .then(() => printLater(3))
+      .then(() => printLater(4));
+
+● Promise에서
+  * 결과값을 반환: resolve(결과값)
+  * 오류를   발생: reject(오류)
+
+  여기에서 반환되는 결과값과 오류는 .then 또는 .catch에 전달하는 함수의 파라미터로 설정됩니다.
+
+  function printLater(number) {
+    return new Promise((resoleve, reject) => {      // 새 Promise를 만들어서 리턴합니다.
+      if (number > 4) {
+        return reject('number is greater than 4');  // reject는 오류를 발생시킵니다.
+      }
+
+      setTimeout(function() {
+        console.log(number);
+        resoleve(number+1);   // 현재 숫자에 1을 더한 값을 반환합니다.
+      }, 1000);
+    });
+  }
+
+  printLater(1)
+    .then((num) => printLater(num)) // 2
+    .then((num) => printLater(num)) // 3
+    .then((num) => printLater(num)) // 4
+    .then((num) => printLater(num)) // reject
+    .catch(e => console.log(e));    // number is greater than 4
