@@ -1,0 +1,32 @@
+이제 본격적으로 axios를 사용하여 웹 요청을 해보겠습니다.
+
+1.$ yarn add axios
+
+2.App 컴포넌트에서 axios를 불러오고,
+  componentDidMount에서 axios를 사용하여 REST API를 요청하겠습니다.
+  요청에서 사용할 API는 jsonplaceholder에서 제공하는 테스트용 가짜 API입니다.
+  [src/App.js]
+  ...
+  import axios from 'axios';
+
+  class App extends Component {
+    componentDidMount() {
+        axios.get('https://jsonplaceholder.typicode.com/posts/1')
+            .then(response => console.log(response));
+    }
+    ...
+
+  [화면]
+  => data 부분을 보면 API에서 응답한 내용이 들어 있습니다.
+
+  config: {adapter: ƒ, transformRequest: {…}, transformResponse: {…}, timeout: 0, xsrfCookieName: "XSRF-TOKEN", …}
+  data:
+    body: "quia et suscipit↵suscipit ..."
+    id: 1
+    title: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit"
+    userId: 1
+  __proto__: Object
+  headers: {pragma: "no-cache", content-type: "application/json; charset=utf-8", cache-control: "public, max-age=14400", expires: "Fri, 01 Feb 2019 07:48:50 GMT"}
+  request: XMLHttpRequest {onreadystatechange: ƒ, readyState: 4, timeout: 0, withCredentials: false, upload: XMLHttpRequestUpload, …}
+  status: 200
+  statusText: ""
