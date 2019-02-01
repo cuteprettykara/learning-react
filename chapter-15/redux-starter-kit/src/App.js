@@ -31,6 +31,8 @@ class App extends Component {
         return (
             <div>
                 <h1>{number}</h1>
+                <button onClick={CounterActions.increment}>+</button>
+                <button onClick={CounterActions.decrement}>-</button>
                 {
                   loading
                     ? <h2>로딩 중...</h2>
@@ -41,8 +43,6 @@ class App extends Component {
                             <h2>{post.body}</h2>
                           </div>
                 }
-                <button onClick={CounterActions.increment}>+</button>
-                <button onClick={CounterActions.decrement}>-</button>
             </div>
         );
     }
