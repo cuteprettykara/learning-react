@@ -14,3 +14,43 @@ loadData = () => {
             console.log(error)
         );
 }
+
+
+create-react-app으로 만든 프로젝트는 바벨 설정에 Async to generator transform 플러그인이 적용되어
+async/await라는 ES7 문법을 사용할 수 있습니다.
+이 문법을 사용하면 기존 코드를 더욱 깔금하게 작성할 수 있습니다.
+
+loadData = async () => {
+    const { PostActions, number } = this.props;
+    try {
+        const response = await PostActions.getPost(number);
+        console.log(response);
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+* await를 쓸 함수의 앞부분에 async 키워드를 붙여주고,
+* 기다려야할 Promise 앞에 await 키워드를 붙여줍니다.
+
+그리고 await를 사용할 때는 꼭 try~catch 문으로 오류를 처리해야 합니다.
+오류를 처리하지 않는다면, 오류가 발생했을 때 해당 함수는
+
+* 오류 위치에서 작업을 중지하고
+* 더 이상 진행하지 않습니다.
+
+
+지금까지 리덕스의 정석대로 비동기 웹 요청을 하는 방법을 배워 보았습니다. 조금 복잡하지요?
+
+* 각 요청마다 액션 타입을 [세 개씩] 선언하고
+* 요청 전/성공/실패 상황에 따라 [각각 다른 액션을 디스패치]해야 하므로
+
+조금 번거로울 수도 있는 작업입니다.
+
+리덕스에서 비동기 작업을 처리하는 방법은 redux-thunk 외에도 여러 가지가 있습니다.
+
+* redux-promise-middleware
+* redux-pender
+* redux-saga
+* redux-observable
