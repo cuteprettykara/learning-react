@@ -1,0 +1,82 @@
+기존의 App컴포넌트에서는 axios를 직접 사용하여 웹 요청을 했습니다.
+
+1.해당 코드를 지우고, +/- 버튼을 눌렀을 때 호출되는 incrementAsync, decrementAsync의
+  Async를 지워서 이전 상태로 돌려 주세요.
+2.post모듈의 액션 생성 함수를 불러와 PostActions에 바인딩하고,
+  post모듈 안의 상태인 data, pending, error값을 연결하세요.
+
+  [src/App.js]
+  ...
+  import * as postActions from './modules/index';
+
+  class App extends Component {
+      componentDidMount() {
+        // 추후 getPost 호출
+      }
+
+      render() {
+          const { CounterActions, number } = this.props;
+
+          return (
+              <div>
+                  <h1>{number}</h1>
+                  <button onClick={CounterActions.increment}>+</button>
+                  <button onClick={CounterActions.decrement}>-</button>
+              </div>
+          );
+      }
+  }
+
+  export default connect(
+      (state) => ({
+          number: state.counter,
+          post: state.post.data,
+          loading: state.post.pending,
+          error: state.post.error
+      }),
+      (dispatch) => ({
+          CounterActions: bindActionCreators(counterActions, dispatch),
+          PostActions: bindActionCreators(postActions, dispatch)
+      })
+  )(App);
+
+3.다음으로 loadData 메소드를 만들겠습니다.
+  해당 메소드에서는 PostActions.getPost를 호출합니다.
+  파라미터는 현재 카운터의 값을 넣으세요.
+  그리고 이 메소드를 컴포넌트가 처음 마운트될 때와 number 값에 변경이 있을 때 호출하세요.
+  ...
+  loadData = () => {
+      const { PostActions, number } = this.props;
+      PostActions.getPost(number);
+  }
+
+  componentDidMount() {
+      this.loadData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+      if (this.props.number !== prevProps.number) this.loadData();
+  }
+
+4.이제 post 상태에 따라서 결과물을 렌더링하겠습니다.
+  render() {
+      const { CounterActions, number, post, loading, error } = this.props;
+
+      return (
+          <div>
+              <h1>{number}</h1>
+              {
+                loading
+                  ? <h2>로딩 중...</h2>
+                  : error
+                      ? <h2>오류 발생</h2>
+                      : <div>
+                          <h2>{post.title}</h2>
+                          <h2>{post.body}</h2>
+                        </div>
+              }
+              <button onClick={CounterActions.increment}>+</button>
+              <button onClick={CounterActions.decrement}>-</button>
+          </div>
+      );
+  }
