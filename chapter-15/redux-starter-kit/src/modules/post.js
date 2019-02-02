@@ -26,7 +26,7 @@ export const getPost = postId => dispatch => {
       dispatch(getPostSuccess(response));
 
       // 나중에 getPostAPI.then을 했을 때 then에 전달하는 함수에서
-      // response에 접근할 수 잏게 합니다.
+      // response에 접근할 수 있게 합니다.
       return response;
     })
     .catch(error => {
@@ -34,7 +34,7 @@ export const getPost = postId => dispatch => {
       dispatch(getPostFailure(error));
 
       // error를 throw하여 이 함수를 실행한 후,
-      // 다시 한 번 catch를 할 수 잏게 합니다.
+      // 다시 한 번 catch를 할 수 있게 합니다.
       throw(error);
     });
 };

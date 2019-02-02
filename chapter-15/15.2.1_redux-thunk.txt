@@ -1,5 +1,8 @@
+리덕스를 사용하는 애플리케이션에서 비동기 작업을 처리할 때 가장 기본적인 방법은 redux-thunk 미들웨어를 사용하는 것입니다.
+이 미들웨어는 리덕스를 개발한 댄 아브라모프가 만든 것으로 리덕스 공식 매뉴얼에서도 이를 사용하여 비동기 작업을 다룹니다.
+
 ● thunk
-  특정 작업을 나중에 할 수 있도록 미루려고 [함수 형태]로 감싼 것
+  특정 작업을 [나중에 할 수 있도록] 미루려고 [함수 형태]로 감싼 것
 
 ● redux-thunk
   이 미들웨어는 [객체]가 아닌 [함수]도 디스패치할 수 있게 합니다.
@@ -19,23 +22,25 @@
       };
     };
 
-  * 1초 뒤에 액션이 디스패치되는 예제 코드
 
-    function incrementAsync() { //thunk 생성 함수
-      return dispatch => {
+  * 1초 뒤에 액션이 디스패치되는 예제 코드
+    function incrementAsync() {
+
+      return dispatch => {      // dispatch를 파라미터로 가지는 함수를 리턴합니다.
         // 1초 뒤 액션 디스패치
         setTimeout(() => {
           dispatch(increment());
         }, 1000);
       }
     }
+    store.dispatch(incrementAsync()); // 1초 뒤에 디스패치합니다.
 
-    store.dispatch(incrementAsync());
 
-  * 현재 상태에 따라 액션을 디스패치하거나 무시하는 예제 코드
+  * 조건(현재 상태)에 따라 액션을 디스패치하거나 무시하는 예제 코드
+    function incrementIfOdd() {
 
-    function incrementIfOdd() { //thunk 생성 함수
-      return (dispatch, getState) => {
+      return (dispatch, getState) => {  // getState를 받으므로 현재상태에 접근할 수 있습니다.
+
         const { counter } = getState();
 
         if (counter % 2 === 0) return;
@@ -47,7 +52,8 @@
     store.dispatch(incrementIfOdd());
 
 ● thunk 생성 함수
-  객체가 아니라 함수(dispatch와 getState를 파라미터로 가지는 함수)를 반환하는 함수.
+  객체가 아니라 이렇게 함수(dispatch와 getState를 파라미터로 가지는 함수)를 반환하는 함수는
+  액션 생성 함수라 하지 않고, thunk 생성 함수라고 합니다.
 
 ● 설치
   $ yarn add redux-thunk
@@ -93,3 +99,19 @@
   ...
   <button onClick={CounterActions.incrementAsync}>+</button>
   <button onClick={CounterActions.decrementAsync}>-</button>
+
+  [결과화면]
+  action undefined @ 10:31:08.164 => 1. 함수형 액션을 먼저 디스패치하고,
+	  prev state {counter: 0}
+	  action  ƒ (dispatch) {
+              // 1초 뒤 액션 디스패치
+              setTimeout(function () {
+                dispatch(increment());
+              }, 1000);
+            }
+	  next state {counter: 0}
+
+  action INCREMENT @ 10:31:09.166 => 2. 1초 뒤에 우리가 지정한 액션을 디스패치합니다.
+    prev state {counter: 0}
+    action     {type: "INCREMENT"}
+    next state {counter: 1}
