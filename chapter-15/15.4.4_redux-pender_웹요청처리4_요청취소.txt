@@ -1,0 +1,69 @@
+redex-pender를 사용하면 Promise 기반 액션을 아주 쉽게 취소할 수 있습니다.
+
+Promise 기반 액션을 디스패치하고 나면 cancel 함수가 포함된 Promise를 반환합니다.
+이 cancel 함수를 호출하면 미들웨어가 해당 요청을 더 이상 처리하지 않습니다.
+
+App 컴포넌트에서 Esc를 눌렀을 때 요청을 취소하도록 코드를 작성해 봅시다.
+
+[src/App.js]
+class App extends Component {
+
+  cancelRequest = null;
+
+  handleCancel = () => {
+      if (this.cancelRequest) {
+          this.cancelRequest();
+          this.cancelRequest = null;
+      }
+  }
+
+  loadData = async () => {
+      const { PostActions, number } = this.props;
+      try {
+          const p = PostActions.getPost(number);
+          this.cancelRequest = p.cancel;
+          const response = await p;
+
+          console.log(response);
+
+      } catch (e) {
+          console.log(e);
+      }
+  }
+
+  componentDidMount() {
+      this.loadData();
+
+      window.addEventListener('keyup', e=> {
+          if (e.key === 'Escape') this.handleCancel();
+      });
+  }
+  ...
+
+  요청을 취소했을 때 특정 작업을 하고 싶다면 리듀서의 ...pender를 사용하는 부분에서 onCancel
+  함수를 추가하면 됩니다.
+
+  [src/modules/post.js]
+  export default applyPenders(reducer, [
+    {
+      type: GET_POST,
+      // 성공했을 때 해야 할 작업이 따로 없으면 이 함수 또한 생략해도 됩니다.
+      onSuccess: (state, action) => {
+        ...
+      },
+      onCancel: (state, action) => {
+        return {
+          data: {
+            title: '취소됨',
+            body: '취소됨'
+          }
+        }
+      }
+    }
+  ]);
+
+페이지를 열고 +버튼을 눌러 요청을 시작한 후 바로 esc를 눌러 보세요.
+
+여기서 cancel 함수를 호출한다고 해서 웹 요청을 취소하는 것은 아닙니다.
+서버에 요청을 이미 보냈기 때문에 서버는 응답할 것입니다.
+이 응답을 미들웨어 쪽에서 무시할 뿐입니다.

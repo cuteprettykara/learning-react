@@ -6,10 +6,22 @@ import * as postActions from './modules/post';
 
 class App extends Component {
 
+    cancelRequest = null;
+
+    handleCancel = () => {
+        if (this.cancelRequest) {
+            this.cancelRequest();
+            this.cancelRequest = null;
+        }
+    }
+
     loadData = async () => {
         const { PostActions, number } = this.props;
         try {
-            const response = await PostActions.getPost(number);
+            const p = PostActions.getPost(number);
+            this.cancelRequest = p.cancel;
+            const response = await p;
+
             console.log(response);
 
         } catch (e) {
@@ -19,6 +31,10 @@ class App extends Component {
 
     componentDidMount() {
         this.loadData();
+
+        window.addEventListener('keyup', e=> {
+            if (e.key === 'Escape') this.handleCancel();
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -40,7 +56,7 @@ class App extends Component {
                         ? <h2>오류 발생</h2>
                         : <div>
                             <h2>{post.title}</h2>
-                            <h2>{post.body}</h2>
+                            <p>{post.body}</p>
                           </div>
                 }
             </div>
