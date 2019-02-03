@@ -1,0 +1,57 @@
+* 리듀서에서 비동기 작업을 redux-pender로 관리할 때는 ...pender를 사용합니다.
+
+* 비동기 작업을 여러 개 관리한다면
+  1 ...pender를 여러 번 사용하면 됩니다.
+  2 또는 다음과 같이 applyPenders 함수를 사용할 수도 있습니다.
+
+  [src/modules/post.js]
+  ...
+  import { applyPenders } from 'redux-pender';
+
+  const reducer = handleActions({
+    // 다른 일반 액션들을 관리..
+  }, initialState);
+
+  // 첫 번째 파라미터 : 일반 리듀서
+  // 두 번재 파라미터 : pender 관련 객체들을 배열 형태로
+  export default applyPenders(reducer, [
+    {
+      type: GET_POST,
+      // 성공했을 때 해야 할 작업이 따로 없으면 이 함수 또한 생략해도 됩니다.
+      onSuccess: (state, action) => {
+        const { title, body } = action.payload.data;
+        return {
+          data: {
+            title,
+            body
+          }
+        }
+      }
+    },
+    /*
+      다른 pender 액션들
+      { type: GET_SOMETHING, onSuccess: (state, action) => ... },
+      { type: GET_SOMETHING, onSuccess: (state, action) => ... }
+    */
+  ]);
+
+  [src/App.js]
+  export default connect(
+    (state) => ({
+        number: state.counter,
+        post: state.post.data,
+        loading: state.pender.pending['GET_POST'],
+        error: state.pender.failure['GET_POST']
+    }),
+    ...
+  )(App);
+
+* Promise 기반 액션을 시작하면 액션 두 개를 디스패치합니다.
+  1. GET_POST_PENDING
+  2. @redux-pender/pending
+
+  두 번째 액션을 조사해 보세요.
+  {type: "@@redux-pender/PENDING", payload: "GET_POST"}
+
+  * 이 액션의 payload 값에는 액션 이름이 들어가고,
+  * 이에 따라 pender 리듀서의 상태를 변화시킵니다.
