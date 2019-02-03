@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import modules from './modules';
-import promiseMiddleware from 'redux-promise-middleware';
+import penderMiddleware from 'redux-pender';
 
 import { createLogger } from 'redux-logger';
 
@@ -10,10 +10,6 @@ import { createLogger } from 'redux-logger';
 */
 const logger = createLogger();
 
-const pm = promiseMiddleware({
-  promiseTypeSuffixes: ['PENDING', 'SUCCESS', 'FAILURE']
-});
-
-const store = createStore(modules, applyMiddleware(logger, pm));
+const store = createStore(modules, applyMiddleware(logger, penderMiddleware()));
 
 export default store;

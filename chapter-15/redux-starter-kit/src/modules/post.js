@@ -1,23 +1,23 @@
-import { handleActions } from 'redux-actions';
+import { handleActions, createAction } from 'redux-actions';
 import axios from 'axios';
+import { pender } from 'redux-pender';
 
 function getPostAPI(postId) {
   return axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`);
 }
 
 const GET_POST = 'GET_POST';
-const GET_POST_PENDING = 'GET_POST_PENDING';
-const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
-const GET_POST_FAILURE = 'GET_POST_FAILURE';
 
-export const getPost = postId => ({
-  type: GET_POST,
-  payload: getPostAPI(postId)
-});
+/*
+  redux-pender의 액션 구조는 Flux standard action(https://github.com/acdlite/flux-standard-action)
+  을 따르기 때문에, createAction으로 액션을 만들 수 있습니다.
+  두 번째로 들어가는 파라미터는 Promise를 반환하는 함수여야 합니다.
+*/
+export const getPost = createAction(GET_POST, getPostAPI);
 
 const initialState = {
-  pending: false,
-  error: false,
+  // 요청이 진행중인지, 오류가 발생하는지 여부는 더 이상 직접 관리할 필요가 없습니다.
+  // penderReducer가 담당하기 때문이죠.
   data: {
     title: '',
     body: ''
@@ -25,30 +25,26 @@ const initialState = {
 }
 
 export default handleActions({
-  [GET_POST_PENDING]: (state, action) => {
-    return {
-      ...state,
-      pending: true,
-      error: false
-    };
-  },
-  [GET_POST_SUCCESS]: (state, action) => {
-    const { title, body } = action.payload.data;
+  ...pender({
+    type: GET_POST, // type이 주어지면 이 type에 접미사를 붙인 액션 핸들러들이 담긴 객체를 만듭니다.
 
-    return {
-      ...state,
-      pending: false,
-      data: {
-        title: title,
-        body: body
+/*  요청 중일 때와 실패했을 때 추가로 해야 할 작업이 있다면
+    이렇게 onPending과 onFailure를 추가하면 됩니다.
+      onPending: (state, action) => state,
+      onFailure: (state, action) =>  state
+*/
+      // 성공했을 때 해야 할 작업이 따로 없으면 이 함수 또한 생략해도 됩니다.
+      onSuccess: (state, action) => {
+        const { title, body } = action.payload.data;
+        return {
+          data: {
+            title,
+            body
+          }
+        }
       }
-    };
-  },
-  [GET_POST_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      pending: false,
-      error: true
-    };
-  }
+
+      // 함수를 생략했을 때 기본 값으로는 (state, action) => state를 설정합니다.
+      // (state를 그대로 반환한다는 것이죠.)
+  })
 }, initialState);

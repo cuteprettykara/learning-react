@@ -1,0 +1,77 @@
+작동방식은 redux-promise-middleware와 유사합니다.
+  * 액션 객체 안의 payload가 Promise 형태라면
+  * 시작하기전, 완료 또는 실패를 했을 때 뒤에 PENDING, SUCCESS, FAILURE 접미사를 붙여줍니다.
+
+추가로 요청을 관리하는 [리듀서가 포함]되어 있으며,
+요청 관련 액션들을 처리하는 [액션 핸들러 함수]들을 자동으로 만드는 도구도 들어 있습니다.
+
+요청중인 액션을 취소할 수 있는 기능도 내장되어 있습니다.
+
+[설치와 적용]
+* $ yarn add redux-pender
+
+* store에 미들웨어 적용
+  [src/store.js]
+  import penderMiddleware from 'redux-pender';
+  ...
+  const store = createStore(modules, applyMiddleware(logger, penderMiddleware()));
+  ...
+
+* 라이브러리 안에 내장된 리듀서를 루트 리듀서에 넣어 주어야 합니다.
+  ...
+  import { penderReducer } from 'redux-pender';
+
+  export default combineReducers({
+      counter,
+      post,
+      pender: penderReducer
+  });
+
+  이 리듀서는 요청 상태를 관리합니다. 이 리듀서가 가진 상태구조는 다음과 같습니다.
+  {
+    pending: {},
+    success: {},
+    failure: {}
+  }
+
+  새 Promise 기반 액션을 디스패치하면 상태는 다음과 같이 변합니다.
+  {
+    pending: {
+      'ACTION_NAME': true
+    },
+    success: {
+      'ACTION_NAME': false
+    },
+    failure: {
+      'ACTION_NAME': false
+    }
+  }
+
+  성공적으로 요청이 끝나면 다음과 같이 변합니다.
+  {
+    pending: {
+      'ACTION_NAME': false
+    },
+    success: {
+      'ACTION_NAME': true
+    },
+    failure: {
+      'ACTION_NAME': false
+    }
+  }
+
+  요청이 실패한다면 다음과 같이 failure 부분이 변경됩니다.
+  {
+    pending: {
+      'ACTION_NAME': false
+    },
+    success: {
+      'ACTION_NAME': false
+    },
+    failure: {
+      'ACTION_NAME': true
+    }
+  }
+
+  이런 작업은 pender 리듀서가 액션 이름에 따라서 자동으로 상태를 변경해 주기 때문에,
+  요청과 관련된 상태는 더 이상 직접 관리할 필요가 없습니다.
