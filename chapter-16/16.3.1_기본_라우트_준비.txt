@@ -1,0 +1,38 @@
+1.페이지를 열었을 때, 즉 주소에 아무것도 지정하지 않았을 때 기본적으로 보여 줄 Home 라우트
+  [src/pages/Home.js]
+  import React from 'react';
+
+  const Home = () => {
+    return (
+      <div>
+        <h2>홈</h2>
+      </div>
+    );
+  };
+
+  export default Home;
+
+2.같은 형식으로 About 컴포넌트도 작성
+  [src/pages/About.js]
+  import React from 'react';
+
+  const About = () => {
+    return (
+      <div>
+        <h2>소개</h2>
+        <p>
+          안녕하세요. 저는 리액트 라우터입니다.
+        </p>
+      </div>
+    );
+  };
+
+  export default About;
+
+3.방금 만든 페이지 컴포넌트들을 불러와 파일 하나로 내보낼 수 있도록 인덱스 파일을 만듭니다.
+  [src/pages/index.js]
+  /* 다음 코드는 컴포넌트를 불러온 다음에
+    동일한 이름으로 내보내 줍니다. */
+
+  export { default as Home } from './Home';
+  export { default as About } from './About';

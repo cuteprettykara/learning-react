@@ -1,0 +1,24 @@
+이제 만든 페이지에 주소를 설정해 봅시다.
+페이지 주소를 설정할 때는 Route 컴포넌트를 사용합니다.
+App 컴포넌트를 다음과 같이 수정하세요.
+
+[src/App.js]
+...
+import { Route } from 'react-router-dom';
+import { Home, About } from 'pages';
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Route exact path="/" component={Home} />
+        <Route path="/about" component={About} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+exact값은 주소가 여기에서 설정한 path와 정확히 일치할 때만 보이도록 설정합니다.
+이 exact값을 제거하면, /about 경로로 들어와도 /경로의 내부이기 때문에 일치하는 것으로 간주하여 컴포넌트가 보입니다.

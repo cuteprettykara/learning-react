@@ -1,0 +1,54 @@
+1. App 컴포넌트
+  이 컴포넌트에서는 웹 브라우저의 주소에 따라서 어떤 컴포넌트를 보여 줄지 정의합니다.
+  지금은 일단 텍스트만 렌더링하도록 설정하세요.
+
+  [src/App.js]
+  import React, { Component } from 'react';
+
+  class App extends Component {
+    render() {
+      return (
+        <div>
+          리액트 라우터를 배워봅시다.
+        </div>
+      );
+    }
+  }
+
+  export default App;
+
+2.Root 컴포넌트
+  이 컴포넌트는 우리의 웹 애플리케이션에 BrowserRouter를 적용합니다.
+  BrowserRouter는 HTML5의 history API를 사용하여 새로고침하지 않고도 페이지 주소를 교체할 수 있게 합니다.
+
+  [src/Root.js]
+  import React from 'react';
+  import { BrowserRouter } from 'react-router-dom';
+  import App from './App';
+
+  const Root = () => {
+    return (
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+  };
+
+  export default Root;
+
+3.이제 index.js에서 App이 아닌 Root를 렌더링하도록 수정하세요.
+  [src/index.js에서]
+  import React from 'react';
+  import ReactDOM from 'react-dom';
+  import './index.css';
+  import Root from './Root';
+  import * as serviceWorker from './serviceWorker';
+
+  ReactDOM.render(<Root />, document.getElementById('root'));
+
+  // If you want your app to work offline and load faster, you can change
+  // unregister() to register() below. Note this comes with some pitfalls.
+  // Learn more about service workers: http://bit.ly/CRA-PWA
+  serviceWorker.unregister();
+
+4. 개발 서버를 실행
