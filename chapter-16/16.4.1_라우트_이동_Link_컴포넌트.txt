@@ -1,0 +1,44 @@
+애플리케이션 안에서 다른 라우트로 이동할 때는,
+다른 페이지로 이동하는 링크를 작성할 때 사용하는 태그인 <a href=...>Link</a> 형식으로 하면 안됩니다.
+=> a 태그를 클릭해서 이동시키면 페이지를 새로고침하면서 로딩하기 때문입니다.
+
+새로고침을 방지하렴변 리액트 라우터에 있는 Link 컴포넌트를 사용해야 합니다.
+=> 페이지를 새로고침하여 불러오지 않고, 주소 창 상태를 변경하고 원하는 라우트로 화면을 전환합니다.
+
+1.components 디렉토리에 Menu 컴포넌트를 작성
+  [src/components/Menu.js]
+  import React from 'react';
+  import { Link } from 'react-router-dom';
+
+  const Menu = () => {
+    return (
+      <div>
+        <ul>
+          <li><Link to="/">홈</Link></li>
+          <li><Link to="/about">소개</Link></li>
+          <li><Link to="/about/react">React 소개</Link></li>
+        </ul>
+      </div>
+    );
+  };
+
+  export default Menu;
+
+2.App에서 이 컴포넌트를 불러와 렌더링.
+  [src/App.js]
+  ...
+  import Menu from 'components/Menu';
+
+  class App extends Component {
+    render() {
+      return (
+        <div>
+          <Menu />
+          ...
+        </div>
+      );
+    }
+  }
+
+  export default App;
+
