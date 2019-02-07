@@ -1,0 +1,84 @@
+라우트 안에 또 다른 라우트를 정의하는 방법
+
+1.먼저 Post라는 페이지 컴포넌트를 작성.
+  이 컴포넌트에서는 params.id 값을 받아와 렌더링합니다.
+  [src/pages/Post.ujs]
+  import React from 'react';
+
+  const Post = ({match}) => {
+    return (
+      <div>
+        포스트 #{match.params.id}
+      </div>
+    );
+  };
+
+  export default Post;
+
+2.이 컴포넌트를 pages/index.js에 등록
+[src/pages/index.js]
+  ...
+  export { default as Post } from './Post';
+
+3.포스트 목록을 보여줄 Posts 페이지 컴포넌트를 작성
+  Link를 만들 때 현재 주소 뒤에 id를 붙여서 목적지 주소를 설정.
+  [ src/pages/Posts.js]
+  import React from 'react';
+  import { Post } from 'pages'
+  import { Link, Route } from 'react-router-dom';
+
+  const Posts = ({match}) => {
+    return (
+      <div>
+        <h3>포스트 목록</h3>
+        <ul>
+          <li><Link to={`${match.url}/1`}>포스트 #1</Link></li>
+          <li><Link to={`${match.url}/2`}>포스트 #2</Link></li>
+          <li><Link to={`${match.url}/3`}>포스트 #3</Link></li>
+        </ul>
+        <Route exact path={match.url} render={()=>(<p>포스트를 선택하세요</p>)} />
+        <Route exact path={`${match.url}/:id`} component={Post}  />
+      </div>
+    );
+  };
+  ...
+
+  나중에 이 컴포넌트는 "/posts"라는 라우트로 등록합니다.
+  match.url은 현재 라우트에 설정된 경로 "/posts"를 알려 줍니다.
+
+  링크의 to값을 지정할 때 "/posts/1"로 설정해도 동일하게 작동합니다.
+  차이점은 나중에 Posts컴포넌트의 라우트 주소를 변경했을 때, 내부 주소도 자동으로 반영합니다.
+
+  첫 번재 라우트에는 id값이 주어져 있지 않고, /posts와 정확히 일치할 때만 render에 있는 내용을 보여주도록 했습니다.
+  따로 컴포넌트를 만들어 등록하는 것이 아니라, 무엇을 보여 줄지 JSX를 직접 작성하는 경우에는 이렇게 render props를 설정하면 됩니다.
+
+  두 번재 라우트에서는 현재 라우트의 주소에 :id가 붙었을 때 Post 컴포넌트를 보여 주도록 설정했습니다.
+
+4.이 컴포넌트도 pages/index.js에 등록하세요.
+  ...
+  export { default as Posts } from './Posts';
+
+5.이제 App컴포넌트에서 라우트를 등록.
+  [src/App.js]
+  ...
+  import { Home, About, Posts } from 'pages';
+  ...
+
+  class App extends Component {
+    render() {
+      return (
+        <div>
+          ...
+          <Route path="/posts" component={Posts} />
+        </div>
+      );
+    }
+  }
+
+  export default App;
+
+6. Menu에 링크 추가
+  [src/components/Menu.js]
+  ...
+  <li><NavLink to="/posts" activeStyle={activeStyle}>포스트 목록</NavLink></li>
+  ...
