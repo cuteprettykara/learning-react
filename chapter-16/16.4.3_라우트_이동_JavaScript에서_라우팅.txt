@@ -2,3 +2,19 @@
 예를 들어 로그인을 구현한다면 로그인이 성공했을 때 특정 경로로 이동시켜 주어야 합니다.
 
 자바스크립트로 라우팅을 하려면 라우트로 사용된 컴포넌트가 받아 오는 props 중 하나인 history 객체의 push 함수를 활용하세요.
+
+[src/Home.js]
+import React from 'react';
+
+const Home = ({history}) => {
+  return (
+    <div>
+      <h2>홈</h2>
+      <button onClick={() => history.push('/about/javascript')}>
+        자바스크립트를 사용하여 이동
+      </button>
+    </div>
+  );
+};
+
+export default Home;
