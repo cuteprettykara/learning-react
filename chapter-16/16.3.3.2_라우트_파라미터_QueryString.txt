@@ -1,0 +1,49 @@
+Query String : ~/about/something?key=value&anotherKey=value
+
+이 문자열로 된 쿼리를 객체 형태로 파싱하려면 query-string 라이브러리를 설치해야 합니다.
+
+Query String은 App.js에서 라우트를 설정할 때 정의하지 않고, 라우트 내부에서 정의합니다.
+
+Query 내용을 받아오려면 라우트로 설정된 컴포넌트에서 받아 오는 props중 하나인
+location 객체의 search값을 조회해야 합니다.
+[src/pages/About.js]
+...
+import queryString from 'query-string';
+
+const About = ({location, match}) => {
+
+  const query = queryString.parse(location.search);
+  console.log(query);
+...
+
+테스트: http://localhost:3000/about/react?color=red
+
+이 결과에 따라 폰트 색상을 변경해 보겠습니다.
+...
+const About = ({location, match}) => {
+
+  const query = queryString.parse(location.search);
+
+  const { color } = query;
+
+  return (
+    <div>
+      <h2 style={{color}}>소개</h2>
+      <p>
+        안녕하세요. 저는 {match.params.name}입니다.
+      </p>
+    </div>
+  );
+};
+
+Query String을 사용할 때는 값들이 모두 문자열이라는 것에 주의하세요.
+따라서 Query String을 사용하여 받아 온 값을 비교해야 할 때는 Boolean형태의 값을 불러오든, 숫자 형태로 불러오든 간에
+
+* 문자열 형태로 비교를 하거나
+* 알맞은 형태로 변환시킨 후 비교해야 합니다.
+
+const { color, bool, number } = query;
+
+if (bool === 'true') {...}
+
+if (parseInt(number) > 10) {...}
