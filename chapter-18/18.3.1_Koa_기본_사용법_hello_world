@@ -1,0 +1,17 @@
+* 기존 src/index.js 파일의 내용을 지우고, 다음 코드를 입력
+[src/index.js]
+const Koa = require('koa');
+
+const app = new Koa();
+
+app.use(ctx => {
+  ctx.body = 'hello world';
+});
+
+app.listen(4000, ()=> console.log('listening to port 4000'));
+
+* 서버 실행
+$ node src
+listening to port 4000
+
+* 웹 브라우저로 http://localhost:4000/ 접속
