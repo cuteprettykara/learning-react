@@ -1,0 +1,38 @@
+라우트를 index.js 파일 하나에 모두 작성하면 코드가 너무 길고, 유지 보수하기도 힘듭니다.
+
+라우터를 여러 파일에 분리 작성하고, 이를 불러와 적용하는 방법을 알아보겠습니다.
+
+● 우선 라우트를 저장할 디렉토리부터 만듭니다.
+  src/api 디렉토리를 만들고, 내부에 index.js 파일을 만드세요.
+
+  [src/api/index.js]
+  const Router = require('koa-router');
+
+  const api = new Router();
+
+  api.get('/test', ctx => {
+    ctx.body = 'test 성공';
+  });
+
+  // 라우터를 내보냅니다.
+  module.exports = api;
+
+● 이 api 라우트를 src/index.js 파일에 불러와 기론 라우터에 /api 경로로 적용하세요.
+  기존에 만들었던 라우트들은 제거합니다.
+  [src/index.js]
+  ...
+  const api = require('./api');
+  ...
+
+  // 라우터 설정
+  router.use('/api', api.routes());
+
+  // app 인스턴스에 라우터 적용
+ ...
+
+  app.listen(4000, () => console.log('listening to port 4000'));
+
+우리가 만든 api 라우터를 서버의 메인 라우터 /api 경로로 설정했습니다.
+따라서 /api/test 경로로 요청하면 아까 준비했던 'test 성공' 문자열이 나타날 것입니다.
+
+http://localhost:4000/api/test    => test 성공
