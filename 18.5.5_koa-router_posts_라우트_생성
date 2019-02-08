@@ -1,0 +1,43 @@
+이번에는 api 라우트 내부에 posts 라우트를 만들어 보겠습니다.
+
+● src/api/posts 디렉토리를 만들고, 그 내부에 index.js파일을 만드세요.
+  [src/api/posts/index.js]
+  const Router = require('koa-router');
+
+  const posts = new Router();
+
+  const printInfo = ctx => {
+    ctx.body = {
+      method: ctx.method,
+      path: ctx.path,
+      params: ctx.params
+    };
+  };
+
+  posts.get('/', printInfo);
+  posts.post('/', printInfo);
+  posts.get('/:id', printInfo);
+  posts.delete('/:id', printInfo);
+  posts.put('/:id', printInfo);
+  posts.patch('/:id', printInfo);
+
+  posts 라우트에 여러 종류의 라우트를 설정한 후, 모두 printInfo 함수를 호출하도록 설정했습니다.
+  문자열이 아닌 JSON 객체를 반환하도록 설정했고, 이 객체에는 현재 요청의 메소드, 경로, 파라미터를 담았습니다.
+
+● api 라우트에 이 posts 라우트를 연결하세요.
+  [src/api/index.js]
+  ...
+  const posts = require('./posts');
+  ...
+
+  api.use('/posts', posts.routes());
+
+  // 라우터를 내보냅니다.
+  ...
+
+● 테스트
+  http://localhost:4000/api/posts => {"method":"GET","path":"/api/posts","params":{}}
+
+  GET 메소드를 사용하는 API는 웹 브라우저에 주소를 입력하여 테스팅할 수 있지만,
+  POST, PUT, DELETE, PATCH 메소드를 사용하는 API들은 자바스크립트로 호출해야 합니다.
+  => 편의상 간편하게 REST API 테스팅을 할 수 있는 도구인 Postman을 설치해서 사용하겠습니다.
