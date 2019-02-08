@@ -1,0 +1,43 @@
+우리가 create-react-app으로 만든 프로젝트에서는 편의상 바로 프로젝트를 진행할 수 있도록 webpack을 사전 설정해 놓았습니다.
+관련 설정 파일은 node_modules에 내장되어 있습니다.
+
+코드 스플리팅을 구현하려면 이 webpack 설정 파일을 커스터마이징해야 합니다.
+16장에서 만든 리액트 라우터 프로젝트 디렉토리에서 다음 명령어를 입력하여 프로젝트의 환경 설정을 밖으로 꺼내 보세요.
+
+$ yarn eject
+
+? Are you sure you want to eject? This action is permanent. Yes
+Ejecting...
+
+Copying files into D:\Documents\JavaScript\React\react-router-tutorial
+  Adding \config\env.js to the project
+  Adding \config\paths.js to the project
+  Adding \config\webpack.config.js to the project
+  Adding \config\webpackDevServer.config.js to the project
+  Adding \config\jest\cssTransform.js to the project
+  Adding \config\jest\fileTransform.js to the project
+  Adding \scripts\build.js to the project
+  Adding \scripts\start.js to the project
+  Adding \scripts\test.js to the project
+
+Updating the dependencies
+...
+
+Updating the scripts
+  Replacing "react-scripts start" with "node scripts/start.js"
+  Replacing "react-scripts build" with "node scripts/build.js"
+  Replacing "react-scripts test" with "node scripts/test.js"
+
+Configuring package.json
+  Adding Jest configuration
+  Adding Babel preset
+  Adding ESLint configuration
+
+Running yarn...
+...
+Ejected successfully!
+
+Please consider sharing why you ejected in this survey:
+  http://goo.gl/forms/Bi6CZjk1EqsdelXk1
+
+Done in 14.54s.
