@@ -1,0 +1,87 @@
+Koa는 v7이상부터 사용하는 것을 권장합니다.
+v7이상부터는 async/await를 바벨을 이용하여 트랜스파일링하지 않고 바로 실행할 수 있기 때문입니다.
+
+● 프로젝트 생성
+이번에 만들 백엔드 프로젝트는 책에서 다루는 마지막 프로젝트인 블로그 서비스와 연동할 서버입니다.
+
+$ mkdir blog
+$ cd blog
+$ mkdir blog-backend
+$ cd blog-backend/
+$ yarn init
+  yarn init v1.12.3
+  question name (blog-backend):
+  question version (1.0.0):
+  question description:
+  question entry point (index.js):
+  question repository url:
+  question author:
+  question license (MIT):
+  question private:
+  success Saved package.json
+  Done in 38.62s.
+
+이 작업을 마치면 package.json 파일을 만듭니다.
+{
+  "name": "blog-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT"
+}
+
+이제 koa를 설치합니다.
+$ yarn add koa
+
+[package.json]
+{
+  "name": "blog-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.7.0"
+  }
+}
+
+
+● ESLint 설정
+$ yarn global add eslint
+$ esLint -v
+  v5.13.0
+
+* 설치가 끝나면 현재 프로젝트에 적용해 보겠습니다.
+$ yarn add eslint
+$ eslint --init
+? How would you like to configure ESLint? Answer questions about your style
+? Which version of ECMAScript do you use? ES2015
+? Are you using ES6 modules? Yes
+? Where will your code run? (Press <space> to select, <a> to toggle all, <i> to invert selection)Browser, Node
+? Do you use CommonJS? No
+? Do you use JSX? Yes
+? Do you use React? Yes
+? What style of indentation do you use? Tabs
+? What quotes do you use for strings? Single
+? What line endings do you use? Windows
+? Do you require semicolons? Yes
+? What format do you want your config file to be in? JavaScript
+Local ESLint installation not found.
+The config that you've selected requires the following dependencies:
+
+eslint-plugin-react@latest eslint@latest
+Successfully created .eslintrc.js file in D:\Documents\JavaScript\React\learning-react\blog\blog-backend
+ESLint was installed locally. We recommend using this local copy instead of your globally-installed copy.
+
+* VSCode의 ESLint 확장프로그램을 설치하세요.
+
+* 확장프로그램을 설치했다면 프로젝트의 디렉토리에 src 디렉토리를 만듭니다.
+  그리고 그 안에 index.js를 만드세요.
+  [src/index.js]
+  const hello = 'hello';
+
+* ESLint 커스터마이징
+생략...
+
+숫자 의미
+* 0: 아무것도 안함
+* 1: 경고
+* 2: 오류
