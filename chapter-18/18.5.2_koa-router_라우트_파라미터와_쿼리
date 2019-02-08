@@ -1,0 +1,32 @@
+● 파라미터 설정 방법 : 리액트 라우터의 설정 방법과 비슷
+  * /about/:name 형식으로 콜론(:)을 사용하여 라우트 경로를 설정합니다.
+  * 파라미터가 있을 수도 있고 없을 수도 있다면 물음표를 사용 => /about/:name?
+
+  이렇게 설정한 파라미터는 함수의 ctx.params 객체에서 조회 가능
+
+● 쿼리
+  * /posts/?id=10 으로 요청했다면 ctx.query 객체에서 {id: '10'} 객체 형태로 조회 가능
+    => 쿼리스트링을 [자동으로 객체 형태로 파싱]해 주므로 별도의 파싱 함수를 돌릴 필요가 없습니다.
+    => [문자열 형태]의 쿼리스트링을 조회해야 할 때는 ctx.querystring을 사용합니다.
+
+● 파라미터와 쿼리를 사용하는 라우트
+[src/index.js]
+...
+router.get('/about/:name?', ctx => {
+  const { name } = ctx.params;
+
+  // name의 존재 유무에 따라 다른 결과 출력
+  ctx.body = name ? `${name}의 소개` : '소개';
+});
+
+router.get('/posts', ctx => {
+  const { id } = ctx.query;
+
+  // id의 존재 유무에 따라 다른 결과 출력
+  ctx.body = id ? `포스트 #${id}` : '포스트 아이디가 없습니다.';
+});
+...
+
+http://localhost:4000/about/react   => react의 소개
+http://localhost:4000/posts         => 포스트 아이디가 없습니다.
+http://localhost:4000/posts?id=10   => 포스트 #10
