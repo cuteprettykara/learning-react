@@ -1,0 +1,26 @@
+서버 코드를 변경할 때마다 서버를 재시작하는 것이 번거롭습니다.
+
+Nodemon을 사용하면 코드를 변경할 때마다 서버를 자동으로 재시작합니다.
+우선 이 도구를 개발용 의존 모듈로 설치하세요.
+
+$ yarn add --dev nodemon
+
+그럼 package.json의 scripts 부분에서 nodemon을 사용할 수 있습니다.
+package.json 파일에 scripts 키를 가진 객체를 만들고,
+거기에 start 스크립트와 start:dev 스크립트를 만드세요.
+  [package.json]
+  ...
+  "scripts": {
+    "start": "node src",
+    "start:dev": "nodemon --watch src/ src/index.js"
+  }
+
+start:dev 스크립트가 실행되면 nodemon도 실행되게 했는데요.
+이때 nodemon은 src 디렉토리를 주시하면서, src/index.js 파일을 실행하도록 설정했습니다.
+따라서 src 디렉토리 내부의 어떤 파일이 변경된다면 src/index.js 파일을 재시작하는 것이지요.
+
+이제부터는 서버를 시작할 때 다음 명령어로 시작할 수 있습니다.
+
+$yarn start     -> node src 명령어와 동일하게 단순히 서버를 실행시킵니다.
+$yarn start:dev -> 코드를 변경할 때마다 서버를 재시작합니다.
+
