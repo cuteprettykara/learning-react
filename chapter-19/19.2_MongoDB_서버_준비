@@ -1,0 +1,15 @@
+● 설치
+  https://www.mongodb.com/download-center/community 에서 인스톨러를 내려 받아 설치
+
+  * DB 저장  경로: C:\data\db
+  * 프로그램 경로: C:\Program Files\MongoDB\Server\버전\bin
+
+● 작동확인
+  [Windows]
+  1.설치 디렉토리로 이동
+  1.mongod로 터미널에서 서버를 실행
+  2.새로운 터미널에서 다음 명령어를 입력
+    $ mongo
+    ...
+    > version()
+    3.4.4

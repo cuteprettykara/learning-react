@@ -1,0 +1,50 @@
+● moongoose
+  * Node.js 환경에서 사용하는
+  * MongoDB 기반
+  * ODB(Obejct Data Modeling) 라이브러리
+
+18장에서 만든 백엔드 프로젝트를 이어서 진행하겠습니다.
+프로젝트 디렉토리에서 다음 명령어를 입력하여 moongoose와 dotenv를 설치하세요.
+
+  $ yarn add mongoose dotenv
+
+● dotenv
+  환경변수들을 파일에 넣고 사용할 수 있게 도와주는 개발 도구입니다.
+  moongoose를 연결할 때, 서버 계정과 비밀번호를 입력하게 되는데요.
+  민감한 정보는 코드에 직접 작성하지 않고, 환경변수로 설정하는 것이 좋습니다.
+  프로젝트를 오픈 소스로 공개할 때는 .gitignore를 작성하여 환경변수가 들어 있는 파일을 제외합니다.
+
+● .env 환경변수 파일 생성
+  환경 변수에는 서버에서 사용할 포트와 MongoDB 주소를 넣어 주겠습니다.
+  프로젝트 루트 경로에 .env 파일을 작성합니다.
+  [.env]
+  PORT=4000
+  MONGO_URI=mongodb://localhost:27017/blog
+
+  blog는 우리가 사용할 DB이름입니다.
+
+● dotenv 적용
+  1.src/index.js 파일 맨 위쪽에 다음과 같이 dotenv를 적용하세요.
+    Node.js에서 환경 변수는 process.env 파일로 조회할 수 있습니다.
+  2.그리고 비구조화 할당 문법을 사용하여 process.env 파일 내부 값에 대한 레퍼런스를 만들고,
+    port에는 기본값이 없으면 4000을 사용하도록 작성하세요.
+  3.마지막으로 코드 아래쪽 서버 포트를 설정하는 부분에서 4000대신 port를 넣어 주세요.
+
+  [src/index.js]
+  require('dotenv').config();
+
+  const Koa = require('koa');
+  ...
+
+  const {
+    PORT: port = 4000,   // 값이 존재하지 않는다면 4000을 기본값으로 사용
+    MONGO_URI: mongoURI
+  } = process.env;
+
+  ...
+  app.listen(port, () => console.log('listening to port', port));
+
+  4.서버가 오류없이 제대로 구동하는지 확인하세요.
+    그리고 .env파일에서 PORT를 4001로 변경하고, 서버를 재시작해 보세요.
+    (.env파일을 변경했을 때는 nodemon에서 자동으로 재시작하지 않으므로 직접 재시작해 주어야 합니다)
+    확인했으면 다시 4000으로 되돌리세요.
