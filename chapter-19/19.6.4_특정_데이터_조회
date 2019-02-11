@@ -1,0 +1,26 @@
+● 특정 id를 가진 데이터를 조회할 때는 .findById()를 사용합니다.
+  /*
+    특정 포스트 조회
+    GET /api/posts/:id
+  */
+  exports.read = async ctx => {
+    const { id } = ctx.params;
+    try {
+      const post = await Post.findById(id).exec();
+      if (!post) {
+        ctx.status = 404;
+        return;
+      }
+      ctx.body = post;
+    } catch (e) {
+      ctx.throw(e, 500);
+    }
+  };
+
+● Postman으로 다음 정보를 요청해 보세요.
+  GET http://localhost:4000/api/posts/5c613bac9acedf569c142958
+
+● 마지막 문자를 다른 문자로 바꾸어 요청 : 404 error
+● 문자열을 몇 개 제거하고 요청 : 500 error
+  => 이는 전달받은 id가 ObjectId 형태가 아니어서 발생하는 서버 오류인데요.
+     이 부분은 나중에 검증하는 작업을 거치도록 하겠습니다.

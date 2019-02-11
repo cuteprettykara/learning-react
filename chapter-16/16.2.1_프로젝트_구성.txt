@@ -26,9 +26,9 @@
 
   * Windows 사용자라면 이 코드가 제대로 동작하지 않을 것입니다.
     Windows 사용자는 cross-env를 설치합니다.
-    $ yarn add cross-env를 설치합니다.
+    $ yarn add --dev cross-env
 
-    각 스크립트의 앞 부분에 NODE_PATH를 설정하세요.
+    각 스크립트의 앞 부분에 cross-env를 설정하세요.
     "scripts": {
       "start": "cross-env NODE_PATH=src react-scripts start",
       "build": "cross-env NODE_PATH=src react-scripts build"
