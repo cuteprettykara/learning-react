@@ -1,0 +1,183 @@
+● 지금 만든 list API는 현재 작성된 모든 포스트를 불러오는데요.
+  포스트 개수가 몇 백개라면 로딩 속도가 느려집니다.
+  페이지 하나에 10~20개 정도가 적당합니다.
+
+● 또 포스트 목록을 볼 때는 포스트 전체 내용을 볼 필요 없이 첫 200글자 정도만
+  보여주면 적당합니다. 불필요하게 모든 내용을 보여 주면 로딩 속도가 지연되고,
+  트래픽도 낭비될 것입니다.
+
+● 페이지 기능은 mongoose-pagination(https://www.npmjs.com/mongoose-pagination)라이브러리를
+  사용하면 매우 간편하게 구현할 수 있습니다. 하지만 우리는 학습을 위해 직접 페이지 기능을 구현해
+  보겠습니다.
+
+● 가짜 데이터 생성하기
+  body쪽에 무의미한 긴 텍스트를 넣어 보도록 하겠습니다.
+  Lorem Ipsum(http://www.lipsum.com/)텍스트를 복사하여 넣은 후,
+  Postman의 Send버튼을 약 40번 정도 눌러 주세요.
+
+● 포스트를 역순으로 불러오기
+  exec()를 하기 전에 sort() 구문을 넣으면 됩니다.
+
+  sort함수의 파라미터는 {key: 1} 형식으로 넣는데요. key는 소팅할 필드를 설정
+  * 값 1: 오름차순
+  * 값 -1: 내림차순
+
+  우리는 _id를 내림차순으로 정렬하고 싶으니, {_id: -1}로 설정합니다.
+
+  exports.list = async ctx => {
+    try {
+      const posts = await Post.find().sort({_id: -1}).exec();
+      ctx.body = posts;
+    } catch (e) {
+      ctx.throw(e, 500);
+    }
+  };
+
+● 보이는 개수 제한
+  limit()함수를 사용합니다.
+  파라미터에는 제한할 숫자를 넣으면 됩니다.
+
+  exports.list = async ctx => {
+    try {
+      const posts = await Post.find()
+        .sort({_id: -1})
+        .limit(10)
+        .exec();
+      ctx.body = posts;
+    } catch (e) {
+      ctx.throw(e, 500);
+    }
+  };
+
+● 페이지 기능 구현
+  추가로 skip 함수도 사용해야 합니다.
+  skip은 '넘긴다'는 의미가 있습니다.
+
+  * 파라미터로 10을 넣어주면 : 첫 10개를 제외하고, 그 다음 데이터를 불러옵니다.
+  * 파라미터로 20을 넣어주면 : 첫 20개를 제외하고, 그 다음 데이터를 불러옵니다.
+  => 결론: (page - 1) * 10을 넣어주면 됩니다.
+
+  page 값은 query에서 받아오도록 설정합니다. 이 값이 없으면 1로 간주합니다.
+
+  exports.list = async ctx => {
+    // page가 주어지지 않았다면 1로 간주
+    // query는 문자열 형태로 받아오므로 숫자로 변환
+    const page = parseInt(ctx.query.page || 1, 10);
+
+    // 잘못된 페이지가 주어졌다면 오류
+    if (page < 1) {
+      ctx.status = 400;
+      return;
+    }
+
+    try {
+      const posts = await Post.find()
+        .sort({_id: -1})
+        .limit(10)
+        .skip((page - 1) * 10)
+        .exec();
+      ctx.body = posts;
+    } catch (e) {
+      ctx.throw(e, 500);
+    }
+  };
+
+● 마지막 페이지 번호 알려 주기
+  1. 응답 내용의 형식을 바꾸어 새로운 필드를 설정하는 방법
+  2. Response Header 중 Link를 설정하는 방버
+  3. 커스텀 헤더를 설정하는 방법
+
+  이 중에서 우리는 커스텀 헤더를 설정하는 방법을 사용하겠습니다.
+  exports.list = async ctx => {
+    ...
+
+    try {
+      const posts = await Post.find()
+        .sort({_id: -1})
+        .limit(10)
+        .skip((page - 1) * 10)
+        .exec();
+
+      // 마지막 페이지 알려주기
+      // ctx.set은 response header를 설정해줍니다.
+      const postCount = await Post.countDocuments().exec();
+      ctx.set('Last-Page', Math.ceil(postCount/10));
+
+      ctx.body = posts;
+    } catch (e) {
+      ctx.throw(e, 500);
+    }
+  };
+
+● 내용 길이 제한
+  body 길이가 200자 이상이면 뒤에 ...을 붙이고, 문자열을 자르는 기능을 구현해 보겠습니다.
+  배열의 map 함수를 사용하여 배열 원소를 전체적으로 바꾸면 됩니다.
+  하지만 mongoose 조회결과로 반환된 배열을 다음과 같이 처리한다면 [원치 않는 데이터]들도 함께 들어갑니다.
+
+  const limitBodyLength = post => ({
+    ...post,
+    body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
+  });
+  ctx.body = posts.map(limitBodyLength);
+
+  [조회 결과]
+  [
+    {
+        "$__": {
+            "strictMode": true,
+            "selected": {},
+            "getters": {},
+            "_id": "5c62276c8fe87d09745ca0e5",
+            "wasPopulated": false,
+            "activePaths": {...},
+            "pathsToScopes": {},
+            "cachedRequired": {},
+            "session": null,
+            "emitter": {...},
+            "$options": {...}
+        },
+        "isNew": false,
+        "_doc": {
+            "tags": [
+                "hello",
+                "world"
+            ],
+            "publishedDate": "2019-02-12T01:53:31.712Z",
+            "_id": "5c62276c8fe87d09745ca0e5",
+            "title": "타이틀",
+            "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry...",
+            "__v": 0
+        },
+        "$init": true,
+        "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry..."
+    },
+    ...
+  ]
+
+  이렇게 되는 이유는 mongoose를 이용하여 조회한 데이터들은 mongoose의 문서 인스턴스로
+  Getter, Setter 등 내장 함수들을 지니고 있기 때문입니다.
+
+  이렇게 불필요한 데이터가 들어가는 것을 방지하는 데 두 가지 방법이 있습니다.
+  1. 조회한 객체를 toJSON 함수를 실행하여 JSON 형태로 변환하는 방법
+  2. 쿼리를 할 때 lean 함수를 사용하여 처음부터 JSON 형태로 조회하는 방법
+
+  * 우선 toJSON부터 사용해 보겠습니다.
+    const limitBodyLength = post => ({
+      ...post.toJSON(),
+      body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
+    });
+
+  * 이번에는 lean을 사용해 보겠습니다.
+    const posts = await Post.find()
+      .sort({_id: -1})
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
+
+    const limitBodyLength = post => ({
+      ...post,
+      body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
+    });
+
+● 다음 장에서는 이번에 만든 API 서버를 기반으로, 마지막 프로젝트인 블로그 시스템을 개발해 보겠습니다.
