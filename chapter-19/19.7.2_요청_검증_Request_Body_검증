@@ -1,0 +1,59 @@
+● 이제 write, update API에서 전달받은 요청 내용을 검증하는 방법을 알아보겠습니다.
+  포스트를 작성할 때 서버는 title, body, tags 값을 모두 전달받아야 합니다.
+  클라이언트가 값을 빼먹었을 때는 400 오류가 발생해야 합니다.
+  지금은 요청 내용을 비운 상태에서 write API를 실행해도 요청이 성공하여 비어 있는 포스트가 등록됩니다.
+
+● 객체를 검증하려고 각 값을 if문으로 검증하는 방법도 있지만, 이를 수월하게 하는 라이브러리인 
+  Joi(https://github.com/hapijs/joi)를 설치하여 사용하겠습니다.
+
+  $ yarn add joi
+
+● 컨트롤러 파일 위쪽에서 Joi를 불러오세요.
+  [src/api/posts/posts.ctrl.js]
+  ...
+  const Joi = require('joi');
+
+● 이제 write 함수에서 Joi를 사용하여 요청 내용을 검증하세요.
+  exports.write = async ctx => {
+    // 객체가 지닌 값들을 검증합니다.
+    const schema = Joi.object().keys({
+      title: Joi.string().required(),   // 뒤에 required를 붙여주면 필수 항목이라는 의미
+      body: Joi.string().required(),
+      tags: Joi.array().items(Joi.string()).required()  // 문자열 배열
+    });
+
+    // 첫 번째 파라미터는 검증할 객체, 두 번째는 스키마
+    const result = Joi.validate(ctx.request.body, schema);
+
+    // 오류 발생 시 오류 내용 응답
+    if (result.error) {
+      ctx.status = 400;
+      ctx.body = result.error;
+      return;
+    }
+
+    const { title, body, tags } = ctx.request.body;
+    ...
+
+● tags 배열이 빠져 있다면, 응답 내용은 다음과 같습니다.
+{
+    "isJoi": true,
+    "name": "ValidationError",
+    "details": [
+        {
+            "message": "\"tags\" is required",
+            "path": [
+                "tags"
+            ],
+            "type": "any.required",
+            "context": {
+                "key": "tags",
+                "label": "tags"
+            }
+        }
+    ],
+    "_object": {
+        "title": "타이틀",
+        "body": "바디"
+    }
+}

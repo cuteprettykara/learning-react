@@ -1,0 +1,39 @@
+● 앞서 read API를 실행할 때, id가 올바른 ObjectId 형식이 아니면 500 오류가 발생했지요?
+  500 오류는 보통 서버에서 문제가 발생했을 경우 발생합니다.
+
+● 잘못된 id를 전달했다면 클라이언트가 요청을 잘못 보낸 것이니 400오류를 띄워주는 것이 맞습니다.
+  그러려면 id값이 올바른 ObjectId인지 확인해야 하는데요. 이를 검증하는 방법은 다음과 같습니다.
+
+  const { ObjectId } = require('mongoose').Types;
+  ObjectId.isValid(id);
+
+● ObjectId를 검증해야 하는 API는 read, remove, update 세 가지인데요.
+  모든 함수에서 일일이 작성하면 불필요한 코드의 중북이 되겠죠?
+
+● 코드를 중복시키지 않고 검증하는 방법은 바로 미들웨어를 만드는 것입니다.
+  컨트롤러 코드 위쪽에 ObjectId를 불러온 후, checkObjectId 함수를 만들어 내보내세요.
+  [src/api/posts/posts.ctrl.js]
+  const { ObjectId } = require('mongoose').Types;
+
+  exports.checkObjectId = (ctx, next) => {
+    const { id } = ctx.params;
+
+    // 검증 실패
+    if (!ObjectId.isValid(id)) {
+      ctx.status = 400;   // Bad Request
+      return null;
+    }
+
+    return next();  // next를 리턴해야 ctx.body가 제대로 설정됩니다.
+  };
+
+● 그리고 라우트를 설정하는 src/api/posts/index.js에서 ObjectId 검증이 필요한 부분에
+  방금 만든 미들웨어를 추가하세요.
+  [src/api/posts/index.js]
+  ...
+  posts.get('/:id', postsCtrl.checkObjectId, postsCtrl.read);
+  posts.delete('/:id', postsCtrl.checkObjectId, postsCtrl.remove);
+  posts.patch('/:id', postsCtrl.checkObjectId, postsCtrl.update);
+
+● read, remove, update API에 잘못된 id를 설정하여 요청을 전송해 보세요.
+  이제 500이 아닌, 잘못된 요청임을 의미하는 400 오류가 발생할 것입니다.
