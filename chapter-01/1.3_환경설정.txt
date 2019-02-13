@@ -1,22 +1,96 @@
-[node.js 설치]
+[Node.js와 npm 설치]
+리액트 애플리케이션은 웹 브라우저에서 실행되는 코드이므로 Node.js와 직접적인 연관은 없지만,
+프로젝트를 개발하는데 필요한 주요 도구들(babel, webpack...)이 Node.js를 사용하기 때문에 설치하는 것입니다.
+
+npm은 Node.js와 함께 설치됩니다.
+
+* macOS와 Ubuntu
+  Node.js를 여버 버전으로 설치하여 관리해 주는 nvm 도구를 권유합니다.
+  추후 Node.js 버전을 업데이트하거나, 프로젝트별로 버전이 다른 Node.js를 사용해야 할 때, 이 도구가 가장 용이하기 때문입니다.
+  ...
+
+* Windows
+  Windows Installer를 내려 받아 설치합니다.
+
+* 설치확인
+  $ node -v
+  v10.15.0
+
+  $ npm -v
+  6.4.1
 
 [yarn 설치]
-1. https://yarnpkg.com/lang/en/ 에서 [instal yarn] 클릭하여 download후 설치.
-2. 버전 확인 : > yarn --version 
+npm은 의존하는 라이브러리 개수가 많아지면 속도가 매우 저하되고,
+의존하는 버전이 설치되는 시점을 기준으로 결정하기 때문에, 설치하는 시기에 따라 다른 버전을 설치할 가능성이 있습니다
+(2018년 5월 현재 npm 최신버전인 v5에서는 이 이슈를 해결했지만, LTS버전에서 사용하눈 v3에서는 이 기능을 지원하지 않습니다).
+
+yarn 도구는 npm 문제점을 개선한 패키지 매니저로 npm을 대체할 수 있습니다.
+
+* macOS
+  Homebrew로 yarn을 설치합니다.
+  ...
+
+* Ubuntu
+  ...
+
+* Windows
+  https://yarnpkg.com/lang/en/ 에서 [install yarn] 클릭하여 download후 설치.
+
+
+* 설치확인
+  $ yarn --version
+  1.12.3
 
 [VS Code 설치]
-[VS Code 확장프로그램 설치]
 
+[VS Code 확장프로그램 설치]
 * ESLint
 * Relative Path : 상대경로에 있는 파일 경로를 펀안하게 작성할 수 있는 도구입니다.
-* Guides        : 들여쓰기 가이드라인을 그려 줍니다
 * Reactjs code snippets(제작자: charalampos karypidis인 것을 설치)
 
 [Git 설치]
+* macOS
+  https://git-scm.com/download/mac
+* Ubuntu
+  sudo apt-get install git-all
+* Windows
+  https://git-scm.com/download/
+
+* 설치확인
+  $ git --version
+  git version 2.20.0.windows.1
 
 [create-react-app 설치]
+Node.js 기반의 개발 도구로 webpack, babel 등을 사용합니다.
+비어 있는 프로젝트부터 시작하여 필요한 도구들을 설치/설정하는 것이 정석이지만,
+리액트 입문자에게 이 과정은 좀 골칫덩어리입니다.
+
+바로 리액트 프로젝트를 만들 수 있는 create-react-app 도구를 사용할 것입니다.
+이 도구를 사용하면 프로젝트 핵심 기능들의 [설정]을 [미리 완료]한 채 리액트 프로젝트를 시작할 수 있습니다.
+
+패키지를 설치하는 방법은 두 가지가 있습니다.
+* 지역적(local)으로 설치 : 프로젝트 디렉토리에서만 사용
+* 전역적(global)으로 설치: 모든 디렉토리에서 사용
+
+create-react-app은 커맨드라인 도구라 모든 디렉토리에서 필요하므로 전역적으로 설치하겠습니다.
+
 > yarn global add create-react-app  # 또는 npm -g install create-react-app
 
+* 설치확인
+$ create-react-app --version
+2.1.1
+
 [hello-react 프로젝트 생성]
-> cd hello-react
-> yarn start    # 개발서버 실행(파일을 수정할 때마다 프로젝트를 다시 빌드하고, 브라우저를 리로딩)
+$ create-react-app hello-react
+
+[프로젝트 개발 서버 실행]
+* 개발서버는 포트 3000번으로 열리며,
+* 파일을 수정할 때마다 프로젝트를 다시 [빌드]하고, 웹 브라우저를 리로딩합니다.
+
+$ cd hello-react/
+$ yarn start
+
+※ 빌드의 뜻
+리액트 프로젝트를 '빌드'한다는 것은
+여러 파일로 분리된 프로젝트를 [한 파일]로 합치는 것입니다.
+이 과정에는 ES6 형태로 작성된 코드를 구 버전 자바스크립트 엔진이 이해할 수 있는 코드로 변환하는 작업도 포함되어 있습니다.

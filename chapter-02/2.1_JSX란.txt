@@ -1,17 +1,84 @@
-파일들을 불러오는 것은 webpack의 로더(loader)가 담당합니다.
-[로더의 종류]
-* css-loader
-* file-loader
-* babel-loader
+[코드 이해]
+Node.js의 주요 특징은 코드를 모듈화하여 재사용할 수 있다는 것입니다.
 
-JSX란?
+  var fs = require('fs');
+
+ES6에서는 모듈을 불러오는 새로운 키워드가 생겼다. : import
+
+  import fs from 'fs';
+
+이렇게 파일을 모듈화해서 사용하는 것은 Node.js의 기능입니다.
+웹 브라우저에서 사용하는 자바스크립트는 Node.js 런타임으로 실행하는 것이 아니기 때문에
+자체적으로 이 기능을 지원하지 않습니다.
+
+보통 웹 브라우저에서 이처럼 해야 할 때는 <script>태그를 사용하죠.
+
+하지만 이런 특징을 웹 브라우저에서도 비슷하게 사용할 수 있는 방법이 있습니다.
+바로 번들링(bundling) 도구를 이용하는 것이죠.
+번들(bundle)은 '묶는다'는 뜻입니다.
+
+번들링 도구는 Browserify, RequireJS, webpack 등이 대표적입니다.
+리액트 프로젝트에서는 주로 webpack을 사용하는 추세입니다.
+
+이런 번들링 도구를 사용하면, require(또는 import)로 모듈을 불러욌을 때, 번들링되면서
+모듈들을 파일 하나로 합쳐 줍니다.
+
+
+이렇게 파일들을 불러오는 것은 webpack의 로더(loader)가 담당합니다.
+[로더의 종류]
+* css-loader  : css 파일 불러오기
+* file-loader : 웹 폰트나 미디어 파일을 불러오기
+* babel-loader: js 파일들을 불러오면서 ES6로 작성된 코드를 ES5 문법으로 변환.
+
+로더는 원래 직접 설치하고 설정해야 하지만, create-react-app이 이런 귀찮은 작업들을 대신하는 것입니다.
+
+
+[JSX란?]
 자바스크립트의 [확장] 문법.
-나중에 코드가 번들링되면서 babel-loader(babel-preset-react)를 사용하여 
+나중에 코드가 번들링되면서 babel-loader(babel-preset-react)를 사용하여
 자바스크립트로(React.createElement) 변환합니다.
 
+* JSX
+var a = (
+  <div>
+    <h1>Awesome <b>React</b></h1>
+  </div>
+);
+
+* babel로 변환한 결과
+var a = React.createElement(
+  'div',
+  null,
+  React.createElement(
+    'h1',
+    null,
+    "Awesome",
+    React.createElement(
+      "b",
+      null,
+      "React"
+    )
+  )
+);
+
 JSX는 리액트용이기 때문에 공식 자바스크립트 문법은 아닙니다.
+* ES6를 지원하려고 babel-preset-es2015를 적용
+* JSX를 지원하려고 babel-preset-react를 적용
+
 
 JSX의 장점
 * 보기 쉽고 익숙하다(HTML과 비슷)
-* 오류 검사(바벨이 코드를 변환하는 과정에서 감지해 냅니다.)
+* 오류 검사(바벨이 코드를 변환하는 과정에서 감지해 냅니다. 예:태그를 닫지 않았을 때)
 * 높은 활용도
+  우리가 알고 있는 div나 span같은 HTML 태그는 물론, 앞으로 만들 컴포넌트도 JSX 안에서 작성할 수 있습니다.
+  src/index.js 파일을 열어 보면 App.js에서 만들어진 App 컴포넌트를 마치 HTML 태그 쓰듯이 사용하는 걸 볼 수 있습니다.
+  [src/index.js]
+  import React from 'react';
+  import ReactDOM from 'react-dom';
+  import './index.css';
+  import App from './App';
+  import * as serviceWorker from './serviceWorker';
+
+  ReactDOM.render(<App />, document.getElementById('root'));
+
+  serviceWorker.unregister();
