@@ -1,0 +1,44 @@
+[src/EventPractice.js]
+import React, { Component } from 'react';
+
+class EventPractice extends Component {
+  render() {
+    return (
+      <div>
+        <h1>이벤트 연습</h1>
+        <input
+          type="text"
+          name="message"
+          placeholder="아무거나 입력해보세요"
+          onChange={e => console.log(e)}
+        />
+      </div>
+    );
+  }
+}
+
+export default EventPractice;
+
+[src/App.js]
+import React, { Component } from 'react';
+import EventPractice from './EventPractice';
+
+class App extends Component {
+  render() {
+    return (
+      <EventPractice />
+    );
+  }
+}
+
+export default App;
+
+[console]
+SyntheticEvent {dispatchConfig: {…}, _targetInst: FiberNode, nativeEvent: InputEvent, type: "change", target: input, …}
+
+콘솔에 기록되는 e 객체는 SyntheticEvent로 웹 브라우저의 네이티브 이벤트를 [감싸는] 객체입니다.
+네이티브 이벤트와 인터페이스가 같으므로 순수 자바스크립트에서 HTML 이벤트를 다룰 때와 독같이 사용하면 됩니다.
+
+예를 들어 onChange 이벤트가 발생할 때, 앞으로 변할 input값인 e.target.value를 콘솔에 기록하려면
+
+  onChange={e => console.log(e.target.value)}
