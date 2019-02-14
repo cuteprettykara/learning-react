@@ -1,0 +1,125 @@
+● props 검증
+  * 우선 코드 위쪽에 PropTypes 불러와야 합니다.
+    [src/MYComponent.js]
+    import PropTypes from 'prop-types';
+
+  * 방법 1: 클래스 외부에서 정의
+    [src/MYComponent.js]
+    import React, { Component } from 'react';
+    import PropTypes from 'prop-types';
+
+    class MyComponent extends Component {
+
+      static defaultProps = {
+        name: '기본 이름'
+      }
+
+      render() {
+        return (
+          <div>
+            안녕하세요, 제 이름은 {this.props.name}입니다.
+          </div>
+        );
+      }
+    }
+
+    MyComponent.propTypes = {
+      name: PropTypes.string  // 문자열
+    }
+
+    export default MyComponent;
+
+  * 방법 2: 클래스 내부에서 정의
+    transform-class-properties 문법을 사용하여 정의
+    [src/MYComponent.js]
+    import React, { Component } from 'react';
+    import PropTypes from 'prop-types';
+
+    class MyComponent extends Component {
+
+      static defaultProps = {
+        name: '기본 이름'
+      }
+
+      static propTypes = {
+        name: PropTypes.string
+      }
+
+      render() {
+        return (
+          <div>
+            안녕하세요, 제 이름은 {this.props.name}입니다.
+          </div>
+        );
+      }
+    }
+
+    export default MyComponent;
+
+    => App 컴포넌트에서 MyComponent의 name값으로 문자열이 아닌 숫자를 전달해보고 개발자도구를 살펴봅시다.
+    [src/App.js]
+    <MyComponent name={3}/>
+
+    [콘솔 화면]
+    Warning: Failed prop type: Invalid prop `name` of type `number` supplied to `MyComponent`, expected `string`.
+
+    ※ 왜 3을 {}로 감쌌나요?
+    [문자열] 외의 값을 컴포넌트에 전달할 때는 {}로 감싸야 합니다. 그렇지 않으면 오류가 발생합니다.
+    => Parsing error: JSX value should be either an expression or a quoted JSX text
+
+● 필수 propTypes 설정
+  [src/MyComponent.js]
+  ...
+  class MyComponent extends Component {
+
+    static defaultProps = {
+      name: '기본 이름'
+    }
+
+    static propTypes = {
+      name: PropTypes.string,
+      age: PropTypes.number.isRequired
+    }
+
+    render() {
+      return (
+        <div>
+          <p>안녕하세요, 제 이름은 {this.props.name}입니다.</p>
+          <p>저는 {this.props.age}살 입니다.</p>
+        </div>
+      );
+    }
+  }
+  ...
+
+  [src/App.js]
+  <MyComponent name="React"/>
+  => 아직 age를 설정하지 않았으니 오류가 발생할 것입니다.
+
+  [콘솔 화면]
+  Warning: Failed prop type: The prop `age` is marked as required in `MyComponent`, but its value is `undefined`.
+
+  오류를 확인했다면 제대로 설정합니다.
+  [src/App.js]
+  <MyComponent name="React" age={4}/> => 정상 작동합니다.
+
+[PropTypes 종류]
+* number
+* string
+* bool
+* symbol
+
+* array
+* func
+* object
+* element : 리액트 요소
+* node : 렌더링할 수 있는 모든 것(숫자, 문자열, element 또는 이들로 구성된 배열)
+
+* instanceOf(MyClass) : 특정 클래스의 인스턴스
+* oneOf(['Male', 'Female']): 주어진 배열 요소 중 값 하나
+* oneOfType([React.PropTypes.string, React.PropTypes.number])
+* arrayOf(React.PropTypes.number)  : 주어진 종류로 구성된 배열
+* objectOf(React.PropTypes.number) : 주어진 종류의 값을 가진 객체
+
+* shape({name: React.PropTypes.string, age: React.PropTypes.number}) : 주어진 스키마를 가진 객체
+* any : 아무 종류

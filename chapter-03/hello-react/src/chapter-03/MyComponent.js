@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class MyComponent extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     static defaultProps = {
         name: '기본 이름'

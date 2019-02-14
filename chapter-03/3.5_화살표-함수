@@ -1,0 +1,92 @@
+ES6의 화살표 함수
+    * 이 문법은 주로 함수를 파라미터로 전달할 때 유용합니다.
+      setTimeout(() => {
+        console.log('hello world')
+      }, 1000);
+
+    * 이 문법이 기존 function을 이용한 함수 선언 방식을 아예 대체하지는 않습니다.
+      this값이 가리키고 있는 값이 서로 다릅니다.
+
+      function BlackDog() {
+        this.name = '흰둥이'; // this가 BlackDog으로 새로 바인딩 된다.
+        return {
+          name: '검둥이',
+          bark:function() {
+            // this가 반환되는 객체로 다시 바인딩 된다.
+            console.log(this.name, ': 멍멍!');  // this는 반환되는 객체를 가리킨다.
+          }
+        };
+      }
+
+      function WhiteDog() {
+        this.name = '흰둥이'; // this가 WhiteDog으로 새로 바인딩된다.
+        return {
+          name: '검둥이',
+          bark: () => {
+            // this가 새로 바인딩되지 않는다.
+            console.log(this.name, ': 멍멍!');  // this는 WhiteDog 인스턴스를 가리킨다.
+          }
+        };
+      }
+
+      const blackDog = new BlackDog();
+      blackDog.bark();  // 검둥이 : 멍멍!
+
+      const whiteDog = new WhiteDog();
+      whiteDog.bark();  // 흰둥이 : 멍멍!
+
+  * 화살표 함수는 값을 연산하여 바로 반환해야 할 때 사용하면 가독성이 높습니다.
+    function twice(value) {
+      return value * 2;
+    }
+
+    const triple = value => value * 3;
+
+● 화살표 함수는 this를 새로 바인딩하지 않습니다.
+  var gangwon = {
+    resorts: ["용평", "평창", "강촌", "강릉", "홍천"],
+    print: function(delay=1000) {
+      setTimeout(function () {
+        console.log(this.resorts.join(","));  // this === window
+      })
+    }
+  }
+
+  gangwon.print();  // Cannot read property 'join' of undefined
+
+● 화살표 함수를 사용하면 제대로 나옵니다.
+  var gangwon = {
+    resorts: ["용평", "평창", "강촌", "강릉", "홍천"],
+    print: function(delay=1000) {
+      setTimeout(() => {
+        console.log(this.resorts.join(","));  // this === gangwon
+         console.log(this === gangwon);       // true
+      })
+    }
+  }
+
+  gangwon.print();  // 용평,평창,강촌,강릉,홍천
+
+● print 프로퍼티를 화살표 함수로 바꾸면 this가 window 객체가 됩니다.
+  var gangwon = {
+    resorts: ["용평", "평창", "강촌", "강릉", "홍천"],
+    print: (delay=1000) => {
+      setTimeout(() => {
+        console.log(this.resorts.join(","));  // this === window
+      })
+    }
+  }
+  gangwon.print();  // Cannot read property 'resorts' of undefined
+
+● 이 문제를 해결하려면 function을 사용해 정의한 함수를 사용해야 한다.
+  var gangwon = {
+      resorts: ["용평", "평창", "강촌", "강릉", "홍천"],
+      print: function(delay=1000) {
+        setTimeout(() => {
+          console.log(this.resorts.join(","));  // this === gangwon
+          console.log(this === gangwon);        // true
+        })
+      }
+    }
+
+    gangwon.print();  // 용평,평창,강촌,강릉,홍천

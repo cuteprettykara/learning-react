@@ -1,0 +1,64 @@
+※ Reactjs Code snippet을 사용하여 초기코드 생성하기
+   클래스를 만들 때 Reactjs code snippets를 설치 했다면 rcc 입력 후 Enter 키를 입력
+
+● props값은 해당 컴포넌트를 불러와 사용하는 부모 컴포넌트에서만 설정할 수 있습니다.
+  (현 상황에서는 App 컴포넌트가 부모 컴포넌트입니다)
+  [src/App.js]
+  import React, { Component } from 'react';
+  import MyComponent from './MyComponent';
+
+  class App extends Component {
+    render() {
+
+      return (
+        <MyComponent />
+      );
+    }
+  }
+
+  export default App;
+
+● props 기본값 설정: defaultProps
+  * 방법 1: 클래스 외부에서 정의(전통적인 방법)
+    [src/MyComponent.js]
+    import React, { Component } from 'react';
+
+    class MyComponent extends Component {
+      render() {
+        return (
+          <div>
+            안녕하세요, 제 이름은 {this.props.name}입니다.
+          </div>
+        );
+      }
+    }
+
+    MyComponent.defaultProps = {
+      name: '기본 이름'
+    }
+
+    export default MyComponent;
+
+  * 방법 2: 클래스 내부에서 정의 => 이 책에서는 두 번째 방법을 사용하겠습니다.
+    이 방법은 일반적인 ES6 문법에서는 작동하지 않고,
+    ES6 stage-2에서 소개한 transform-class-properties 문법으로  사용할 수 있습니다.
+    create-react-app으로 만든 프로젝트는 기본적으로 이 문법을 적용하기 때문에 따로 작업할 것이 없습니다.
+    [src/MyComponent.js]
+    import React, { Component } from 'react';
+
+    class MyComponent extends Component {
+
+      static defaultProps = {
+        name: '기본 이름'
+      }
+
+      render() {
+        return (
+          <div>
+            안녕하세요, 제 이름은 {this.props.name}입니다.
+          </div>
+        );
+      }
+    }
+
+    export default MyComponent;

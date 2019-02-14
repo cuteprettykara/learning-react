@@ -1,0 +1,50 @@
+props는 부모 컴포넌트가 설정하며, 컴포넌트 자신은 해당 props를 [읽기 전용]으로만 사용할 수 있습니다.
+
+컴포넌트 내부에서 읽고 또 [업데이트]할 수 있는 값을 사용하려면 state를 써야 합니다.
+* 이것은 언제나 [기본값을 미리 설정해야 사용할 수 있으며]
+* this.setState()로만 값을 업데이트해야 합니다.
+
+● state 초깃값 설정 방법
+  * 방법1: 원래 state의 초깃값은 constructor 내부에서 설정합니다.
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            number: 0
+        }
+    }
+
+  * 방법2: defaultProps와 propTypes를 정의할 때 사용한 transform-class-properties 문법으로
+    constructor 바깥에서 state 초깃값을 설정할 수도 있습니다.
+    => 책에서는 앞으로 state를 이런 방식으로 사용합니다.
+    [src/MyComponent.js]
+    import React, { Component } from 'react';
+    import PropTypes from 'prop-types';
+
+    class MyComponent extends Component {
+
+      static defaultProps = {
+            name: '기본 이름'
+      }
+
+      static propTypes = {
+            name: PropTypes.string,
+            age: PropTypes.number.isRequired
+      }
+
+      state = {
+            number: 0
+      }
+
+      render() {
+        return (
+        <div>
+            <p>안녕하세요, 제 이름은 {this.props.name}입니다.</p>
+            <p>저는 {this.props.age}살 입니다.</p>
+            <p>숫자: {this.state.number}</p>
+        </div>
+        );
+      }
+    }
+
+    export default MyComponent;
