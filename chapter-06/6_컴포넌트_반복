@@ -2,26 +2,30 @@
   shift + Enter
 
 ● key
-  [컴포넌트 배열]을 렌더링 했을 때, 어떤 원소에 변동이 있었는지 알아내려고 사용합니다.
+  key는 [컴포넌트 배열]을 렌더링 했을 때, 어떤 원소에 변동이 있었는지 알아내려고 사용합니다.
   * key가 없을 때는 가상 DOM을 비교하는 과정에서 리스트를 순차적으로 비교하면서 변화를 감지합니다.
   * key가 있다면 이 값을 사용하여 어떤 변화가 일어났는지 더욱 빠르게 알아낼 수 있습니다.
-  * key값은 유일해야 합니다. 
+  * key값은 유일해야 합니다.
       => 고유 번호가 없다면 map함수에 전달되는 콜백함수의 인자인 index값을 사용.
 
 ● 데이터 제거 기능 구현
   /* 방법1 : splice() 사용*/
   handleRemove = (index) => {
     const newNames = this.state.names.slice();  // 배열 복사
-    
+    newNames.splice(index, 1);
+
     this.setState({
-      names: newNames.splice(index, 1)
+      names: newNames
     })
   }
 
   /* 방법2 : spread operator 사용 */
+  // ...의 역할은 ...뒤에 위치한 배열 값을 그대로 꺼내서 현재 배열에 [복사]
+  // spread operator를 사용하지 않았다면:
+  // this.state.names.slice(0, index).concat(this.stae.names.slice(index+1, names.length));
   handleRemove = (index) => {
     const {names} = this.state;
-    
+
     this.setState({
       names: [
         ...names.slice(0, index),
@@ -33,7 +37,7 @@
   /* 방법3 : filter() 사용 */
   handleRemove = (index) => {
     const {names} = this.state;
-    
+
     this.setState({
       names: names.filter((item, i) => i !== index)
     })
@@ -44,9 +48,9 @@
   이렇게 [우리가 만든 임의의 메소드에] [파라미터]가 있을 때는 내부에서 새로운 함수를 새로 만들면 됩니다.
   const nameList = this.state.names.map(
     (name, index) => (
-      <li 
-        key={index} 
+      <li
+        key={index}
         onDoubleClick={()=>this.handleRemove(index)}>
         {name}
-      </li>) 
+      </li>)
   );
