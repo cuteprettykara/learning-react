@@ -4,10 +4,13 @@
   * 언마운트
 
 ● 마운트
-  1. constructor
-  2. getDerivedStateFromProps
-  3. render
-  4. componentDidMount
+  constructor               : 생성자
+      ↓
+  getDerivedStateFromProps  : props에 있는 값을 state에 동기화
+      ↓
+  render
+      ↓
+  componentDidMount
 
 ● 업데이트
   컴포넌트를 업데이트 할 때는 총 네 가지 경우입니다.
@@ -20,7 +23,7 @@
             ↓
   getDerivedStateFromProps
             ↓
-   shouldComponentUpdate    ← state변경
+   shouldComponentUpdate    ← state변경(setState)
             ↓
           render            ← forceUpdate
             ↓

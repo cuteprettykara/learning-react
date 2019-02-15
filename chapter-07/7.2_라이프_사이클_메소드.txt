@@ -1,9 +1,0 @@
-● getDerivedStateFromProps
-  리액트 v16.3 이후에 새로 만든 메소드
-  props로 받아온 값을 state에 동기화시키는 용도
-
-● getSnapshotBeforeUpdate
-  리액트 v16.3 이후에 새로 만든 메소드
-  render메소드를 호출한 후, DOM에 변화를 반영하기 바로 직전에 호출
-  여기에서 반환하는 값은 compoentDidUpdate의 세 번째 파라미터인 snapshot으로 전달받을 수 있는데,
-  주로 업데이트하기 직전의 값을 참고할 일이 있을 때 활용됩니다(예:스크롤바 위치 유지)
