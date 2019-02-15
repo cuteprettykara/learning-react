@@ -35,7 +35,6 @@ class LifeCycleSample extends Component {
   getSnapshotBeforeUpdate(prevProps, prevState) {
     console.log('getSnapshotBeforeUpdate');
     if (prevProps.color !== this.props.color) {
-      // return this.myRef.style.color;
       return prevProps.color;
     }
 
@@ -51,7 +50,6 @@ class LifeCycleSample extends Component {
 
   componentWillUnmount() {
     console.log('componentWillUnmount');
-    
   }
 
   handleClick = () => {
@@ -65,7 +63,7 @@ class LifeCycleSample extends Component {
     const style = {
       color: this.props.color
     }
-    
+
     return (
       <div>
         <h1 style={style} ref={ref => this.myRef = ref}>
