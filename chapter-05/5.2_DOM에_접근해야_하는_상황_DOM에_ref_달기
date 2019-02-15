@@ -1,0 +1,36 @@
+● 가끔 state만으로 해결할 수 없는 기능이 있습니다.
+  * 특정 input에 포커스 주기
+  * 부모 컴포넌트에서 스크롤 박스 조작하기
+  * Canvas 요소에 그림 그리기 등
+
+● DOM에 ref 속성 추가
+  * props를 설정하듯 하면 됩니다.
+  * ref 값으로는 콜백 함수를 전달합니다.
+  * 콜백 함수는 ref를 파라미터로 가지며, 콜백 함수 내부에서 컴포넌트의 [멤버 변수]에 ref를 담는 코드를 작성합니다.
+    ex) <input ref={ref => this.input = ref} />
+        이렇게 하면 this.input은 input요소의 DOM을 가리킵니다. ref 이름은 자유롭게 지정합니다.
+        DOM type과 관계없이 this.superman = ref 처럼 마음대로 지정하면 됩니다.
+
+● 5.1절에서 만든 ValidatinSample 컴포넌트의 렌더링 결과를 다시 한 번 살펴봅시다.
+  1.input 요소를 클릭하면 포커스가 되면서 텍스트 커서가 깜빡입니다.
+  2.버트을 누르면 포커스가 버튼으로 넘어가면서 왼쪽 input 요소의 텍스트 커서가 더 이상 보이지 않습니다.
+  => 버튼을 눌렀을 때 포커스가 다시 input쪽으로 넘어가도록 코드를 작성해 봅시다.
+
+  [src/ValidatinSample.js]
+  ...
+  handleButtonClick = () => {
+    ...
+    this.superman.focus();
+  }
+
+  render() {
+    return (
+      <div>
+        <input
+          ref={ref => this.superman=ref}
+          ...
+        />
+        ...
+      </div>
+    );
+  }
