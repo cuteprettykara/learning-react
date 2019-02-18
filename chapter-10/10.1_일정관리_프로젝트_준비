@@ -15,7 +15,7 @@
     그리고 src/styles 디렉토리에 _utils.scss 파일을 만들어 open-color 라이브러리를 불러오세요.
     @import '~open-color/open-color';
 
-  6.메인 스타일 설정
+  6.메인 스타일 설정 : index.css 파일을 제거했으니, 이를 대체할 메인 스타일 파일을 설정합니다.
     [src/styles/main.scss]
     @import 'utils';
 
@@ -44,27 +44,3 @@
 
   9.webpack 개발 서버 시작
     $ yarn start
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-● 
-
-
-
-
-
-● 
