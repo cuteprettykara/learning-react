@@ -22,14 +22,14 @@ const initialState = {
 function counter(state = initialState, action) {
   switch(action.type) {
     case INCREMENT:
-      return { 
+      return {
         ...state,
-        number: state.number + action.diff 
+        number: state.number + action.diff
       };
     case DECREMENT:
-      return { 
+      return {
         ...state,
-        number: state.number - action.diff 
+        number: state.number - action.diff
       };
     default:
       return state;
@@ -38,8 +38,8 @@ function counter(state = initialState, action) {
 
 // 스토어 생성
 const { createStore } = Redux;
-/* 
-  나중에 우리가 실제로 프로젝트에서 불러올 때는 
+/*
+  나중에 우리가 실제로 프로젝트에서 불러올 때는
   import { createStore } from 'redux';
   이렇게 불러옵니다.
 */
