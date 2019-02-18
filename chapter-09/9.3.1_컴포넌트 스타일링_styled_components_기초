@@ -1,0 +1,52 @@
+● 자바스크립트 파일 안에 스타일을 선언하는 방식(CSS in JS)
+  관련된 라이브러리가 정말 많습니다. 라이브러리의 종류는
+  https://github.com/MicheleBertoli/css-in-js/ 에서 확인할 수 있습니다.
+
+● 이 절에서는 이 라이브러리 중 개발자에게 가장 많은 사랑을 받는 styled-components를 알아보겠습니다.
+
+● 패키지 설치
+  $ yarn add styled-components
+
+● styled-components 디렉토리에 StyledButton.js 파일 작성
+  [src/styled-components/StyledButton.js]
+  import React from 'react';
+  import styled from 'styled-components';
+
+  const Wrapper = styled.div`
+    border: 1px solid black;
+    display: inline-block;
+    padding: 1rem;
+    border-radius: 3px;
+    &:hover {
+      background: black;
+      color: white;
+    }
+  `;
+
+  const StyledButton = ({children, ...rest}) => {
+    return (
+      <div>
+        <Wrapper {...rest}>
+          {children}
+        </Wrapper>
+      </div>
+    );
+  };
+
+  export default StyledButton;
+
+  [src/styled-components/App.js]
+  import React, { Component } from 'react';
+  import StyledButton from './StyledButton';
+
+  class App extends Component {
+    render() {
+      return (
+        <div>
+          <StyledButton>버튼</StyledButton>
+        </div>
+      );
+    }
+  }
+
+  export default App;

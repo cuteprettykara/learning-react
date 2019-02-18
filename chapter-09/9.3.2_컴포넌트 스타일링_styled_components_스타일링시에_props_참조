@@ -1,0 +1,32 @@
+● ES6 Tagged Template Literals 문법을 사용합니다.
+  이 문법을 사용하는 이유는 스타일링을 할 때 props에 접근하기 위해서입니다.
+  * Tagged Template Literals 문법을 사용하지 않으면 함수가 문자열 자체로 들어갑니다.
+  * Tagged Template Literals 문법을 사용하면 함수가 함수 형태 그대로 전달됩니다.
+
+  [src/styled-components/StyledButton.js]
+  ...
+  const Wrapper = styled.div`
+    border: 1px solid black;
+    display: inline-block;
+    padding: 1rem;
+    border-radius: 3px;
+    font-size: ${props => props.fontSize};
+    &:hover {
+      background: black;
+      color: white;
+    }
+  `;
+
+  const StyledButton = ({children, ...rest}) => {
+    return (
+      <div>
+        <Wrapper fontSize="1.25rem" {...rest}>
+          {children}
+        </Wrapper>
+      </div>
+    );
+  };
+  ...
+
+
+

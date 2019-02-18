@@ -1,0 +1,45 @@
+● 변수와 믹스인은 여러곳에서 재사용하려고 만든 것인데, 현재 우리는 CSS Module을 적용한 상태이므로
+  변수들과 믹스인을 파일마다 공유하지 않습니다. 따라서 이를 전역적으로 사용할 수 있도록
+  스타일 디렉토리를 만들어 전역적으로 쓰는 코드는 따로 분리하고, 컴포넌트 스타일 파일에서 불러와 사용하겠습니다.
+
+● src 디렉토리에 styles 디렉토리를 만들고, utils.scss 파일도 만듭니다.
+  이 파일에 App.scss에 있던 $size와 place-at-center를 잘라 내서 넣어보세요.
+  [src/sass/styles/utils.scss]
+  $size: 100px;
+
+  @mixin place-at-center() {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+● 이렇게 파일을 만들고 나면, App.scss에서 다음과 같이 불러와 사용할 수 있습니다.
+  [src/sass/App.scss]
+  @import './styles/utils.scss';
+
+● 그런데 앞으로 컴포넌트를 저장하는 디렉토리가 더 깊어지면 어떨까요?
+  이 파일을 불러올 때마다 상위 디렉토리로 이동해야 하므로 이렇게 코드를 작성할지도 모릅니다.
+  @import '../../../styles/utis.scss';
+
+  이런 복잡한 상대 경로를 작성하는 것을 피할 수 있을까요?
+
+  webpack에서 sass-loader를 설정할 때 includePaths를 설정해서 경로를 최소화할 수 있습니다.
+  * 이를 설정하려면 config/paths.js 파일에 style 경로를 넣어 주어야 합니다.
+    [config/paths.js - 아래쪽]
+    module.exports = {
+      ...
+      styles: resolveApp('src/styles')
+    }
+
+  * 다음으로 webpack.config.dev.js 파일의 sass-loader 설정 부분을 다음과 같이 수정합니다.
+    {
+      loader: require.resolve('sass-loader'),
+      options: {
+        includePaths: [paths.styles]
+      }
+    }
+
+  * 설정을 마친 후 webpack 개발 서버를 재시작합니다. 이제 다음 방식으로 상대 경로를 생략하고
+    utils.scss 파일을 불러와 사용할 수 있습니다.
+    [src/sass/App.scss]
+    @import 'utils.scss';

@@ -1,0 +1,127 @@
+● Sass
+  * Syntatically awesome style sheet의 약어로, [문법적으로 매우 멋진] 스타일 시트를 의미합니다.
+  * [CSS 문법을 확장]하여 중복되는 코드를 줄여 더욱 보기 좋게 작성할 수 있습니다.
+  * https://sass-guidelin.es/ko/
+
+● Sass 적용
+  $ yarn add node-sass
+
+● Sass 사용
+  * 현재 선택자 참조
+    .box {
+      &:hover {
+        background: yellow;
+      }
+
+      &:active {
+        background: red;
+      }
+    }
+
+  * nested 구조
+    .box {
+      .box-inside {
+        /* ... */
+      }
+    }
+
+  * 변수 사용
+    $size: 100px;
+
+    .box {
+      ...
+      width: $size;
+      height: $size;
+    }
+
+  * 믹스인 사용
+    자주 사용하는 값은 변수에 넣고, 자주 사용하는 구문은 믹스인으로 다시 이용할 수 있습니다.
+    $size: 100px;
+
+    @mixin place-at-center() {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .box {
+      display: inline-block;
+      width: $size;
+      height: $size;
+      border: 1px solid black;
+      position: fixed;
+
+      @include place-at-center();
+
+      ...
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+● 최종 소스
+  [src/sass/App.scss]
+  $size: 100px;
+
+  @mixin place-at-center() {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .box {
+    display: inline-block;
+    width: $size;
+    height: $size;
+    border: 1px solid black;
+    position: fixed;
+
+    @include place-at-center();
+
+    &.blue {
+      background: blue;
+    }
+
+    &:hover {
+      background: yellow;
+    }
+
+    &:active {
+      background: red;
+    }
+
+    .box-inside {
+      background: black;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  [src/App.js]
+  import React, { Component } from 'react';
+  import styles from './App.scss';
+  import classNames from 'classnames/bind';
+
+  const cx = classNames.bind(styles);
+
+  class App extends Component {
+    render() {
+      const {isBlue} = this.props;
+
+      return (
+        <div className={cx('box', {blue:isBlue})}>
+          <div className={cx('box-inside')}></div>
+        </div>
+      );
+    }
+  }
+
+  export default App;
