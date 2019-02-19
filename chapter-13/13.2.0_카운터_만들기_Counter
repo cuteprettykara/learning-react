@@ -1,0 +1,117 @@
+● 작업 환경 설정
+  * 프로젝트 생성
+    $ create-react-app redux-counter
+    $ cd redux-counter/
+    $ yarn add redux react-redux
+  * 프로젝트 초기화: App.css, App.js, App.test.js, logo.svg 파일 제거
+  * 디렉토리 생성
+    ◦ actions   : 액션 타입, 액션 생성함수
+    ◦ components: 프리젠테이셔널 컴포넌트
+    ◦ containers: store에 있는 상태를 props로 받아오는 컨테이너 컴포넌트
+    ◦ reducers  : 리듀서
+    ◦ lib
+
+● 기본적인 틀 생성
+  * containers 디렉토리에 App.js 파일 생성
+    [src/containers/App.js]
+    import React, { Component } from 'react';
+
+    class App extends Component {
+      render() {
+        return (
+          <div>
+            Counter
+          </div>
+        );
+      }
+    }
+
+    export default App;
+
+  * 이를 index.js 파일에 반영
+    import App from './containers/App';
+
+  * 개발 서버 실행
+    $ yarn start
+
+● 프리젠테이셔널 컴포넌트 생성
+  숫자와 색상 값, 더하기/빼기/색상변경 함수를 props로 전달받습니다.
+
+  [src/components/Counter.js]
+  import React from 'react';
+  import PropTypes from 'prop-types';
+  import './Counter.css'
+
+  const Counter = ({number, color, onIncrement, onDecrement, onSetColor}) => {
+    return (
+      <div
+        className="Counter"
+        onClick={onIncrement}
+        onContextMenu={e => {
+          e.preventDefault();
+          onDecrement();
+        }}
+        onDoubleClick={onSetColor}
+        style={{
+          backgroundColor: color
+        }}>
+          {number}
+      </div>
+    );
+  };
+
+  Counter.propTypes = {
+    number: PropTypes.number,
+    color: PropTypes.string,
+    onIncrement: PropTypes.func,
+    onDecrement: PropTypes.func,
+    onSetColor: PropTypes.func
+  };
+
+  Counter.defaultProps = {
+    number: 0,
+    color: 'black',
+    onIncrement: () => console.warn('onIncrement not defined'),
+    onDecrement: () => console.warn('onDecrement not defined'),
+    onSetColor: () => console.warn('onSetColor not defined'),
+  }
+
+  export default Counter;
+
+● css 파일 작성
+  [src/components/Counter.css]
+  .Counter {
+    /* 레이아웃 */
+    width: 10rem;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    /* 색상 */
+    color: white;
+    /* 폰트 */
+    font-size: 3rem;
+    /* 기타 */
+    border-radius: 100%;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.75s;
+  }
+
+● 확인
+  [src/App.js]
+  import React, { Component } from 'react';
+  import Counter from '../components/Counter';
+
+  class App extends Component {
+    render() {
+      return (
+        <div>
+          <Counter />
+        </div>
+      );
+    }
+  }
+
+  export default App;

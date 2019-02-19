@@ -1,8 +1,7 @@
-1.이전에 만든 리듀서들과 작동 방식이 다르므로
+● 이전에 만든 리듀서들과 작동 방식이 다르므로
   reducers 디렉토리 안에 들어있던 color.js와 number.js 파일을 삭제합니다.
   index.js 파일 내용도 비우고 새로 작성합니다.
 
-2.초기 상태 정의
   [src/reducers/index.js]
   import * as types from '../actions/ActionTypes';
 
@@ -16,7 +15,7 @@
     ]
   };
 
-3.리듀서 함수 구현
+  // 리듀서 함수 구현
   const counter = (state=initialState, actions) => {
     // 레퍼런스 생성
     const { counters } = state;
@@ -32,7 +31,7 @@
             }
           ]
         }
-    
+
       case types.REMOVE:
         return {
           counters: counters.slice(0, counters.length-1)

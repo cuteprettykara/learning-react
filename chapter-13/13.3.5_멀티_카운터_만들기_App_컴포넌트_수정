@@ -1,0 +1,37 @@
+● App 컴포넌트를 리덕스에 연결시킵니다.
+  * 이 컴포넌트는 store로부터 필요한 값이 없으니 mapStateToProps는 null로 설정하고
+  * 버튼용 mapDispatchToProps를 만듭니다.
+
+  [src/containers/App.js]
+  import React, { Component } from 'react';
+  import CounterListContainer from '../containers/CounterListCountainer';
+  import Buttons from '../components/Buttons';
+  import { connect } from 'react-redux';
+  import * as actions from '../actions';
+  import getRandomColor from '../lib/getRandomColor';
+
+  class App extends Component {
+    render() {
+      const { onCreate, onRemove } = this.props;
+
+      return (
+        <div>
+          <Buttons onCreate={onCreate} onRemove={onRemove} />
+          <CounterListContainer />
+        </div>
+      );
+    }
+  }
+
+  // 액션 생성 함수 준비
+  const mapDispatchToProps = dispatch => ({
+    onCreate: () => dispatch(actions.create(getRandomColor())),
+    onRemove: () => dispatch(actions.remove())
+  });
+
+  // 리덕스에 연결시키고 내보냅니다.
+  export default connect(null, mapDispatchToProps)(App);
+
+● 리액트에서 리덕스를 사용했을 때 크게 달라지는 점
+  상태를 컴포넌트 내부가 아닌 리듀서에서 관리하면서 코드가 분리된다는 것입니다.
+  그렇기 때문에 컴포넌트를 만들 때, 상태보다는 사용자에게 보여지는 뷰에 더욱 집중할 수 있게 됩니다.

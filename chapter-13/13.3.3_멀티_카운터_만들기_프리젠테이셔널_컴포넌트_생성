@@ -3,11 +3,11 @@
   * 카운터 여러 개를 렌더링할 ConterList를
 만들겠습니다.
 
-1.생성 및 제거 버튼 : Buttons 컴포넌트 생성
+● 생성 및 제거 버튼 : Buttons 컴포넌트 생성
   [src/components/Buttons.js]
   import React from 'react';
   import PropTypes from 'prop-types';
-
+  import './Buttons.css';
 
   const Buttons = ({onCreate, onRemove}) => {
     return (
@@ -30,20 +30,56 @@
 
   export default Buttons;
 
+  [src/components/Buttons.css]
+  .Buttons {
+    display: flex;
+  }
 
-2.여러 카운터를 렌더링 : CounterList 컴포넌트 생성
+  .Buttons .btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .Buttons .add {
+    background: #37b24d;
+  }
+
+  .Buttons .add:hover {
+    background: #40c057;
+  }
+
+  .Buttons .remove {
+    background: #f03e3e;
+  }
+
+  .Buttons .remove:hover {
+    background: #fa5252;
+  }
+
+
+
+
+● 여러 카운터를 렌더링 : CounterList 컴포넌트 생성
   [src/components/CounterList.js]
   import React from 'react';
   import PropTypes from 'prop-types';
   import Counter from './Counter';
+  import './CounterList.css';
 
   const CounterList = ({counters, onIncrement, onDecrement, onSetColor}) => {
 
-    const counterList = counters.map((counter, i) => 
-      <Counter 
+    const counterList = counters.map((counter, i) =>
+      <Counter
         key={i}
         index={i}
-        {...counter}
+        {...counter}  // 좋은 표현! 기억하자 ★★★
         onIncrement={onIncrement}
         onDecrement={onDecrement}
         onSetColor={onSetColor}
@@ -75,8 +111,15 @@
 
   export default CounterList;
 
+  [src/components/CounterList.css]
+  .CounterList {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
-3.Counter 컴포넌트 수정
+● Counter 컴포넌트 수정
   CounterList에서 전달받은 index를 각 이벤트를 실행할 때 함수의 파라미터로 넣어서
   실행할 수 있게 합니다.
   [src/components/Counter.js]
@@ -93,7 +136,7 @@
         onDoubleClick={()=>onSetColor(index)}
         ...
         >
-          {number}      
+          {number}
       </div>
     );
   };

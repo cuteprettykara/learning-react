@@ -1,6 +1,10 @@
-1.기존 컨테이너 컴포넌트인 CounterContainer는 삭제합니다.
+● 기존 컨테이너 컴포넌트인 CounterContainer는 삭제합니다.
 
-2.mapStateToProps로 리덕스 스토어에 있는 값들을 props로 전달하고,
+● Buttons는 따로 컨테이너 컴포넌트를 만들어 주지 않고,
+  * [App컴포넌트를 리덕스에 연결]하여 액션 함수를 연결시키고,
+  * 해당 함수들을 Buttons 컴포넌트에 전달하도록 하겠습니다.
+
+● mapStateToProps로 리덕스 스토어에 있는 값들을 props로 전달하고,
   mapDispatchToProps로 액션 생성 함수들을 연결시킵니다.
 
   [src/containers/CounterListContainer.js]
@@ -27,7 +31,7 @@
 
   export default CounterListCountainer;
 
-3.랜덤 색상 생성함수는 다음에 수정할 App 컴포넌트에서도 사용합니다.
+● 랜덤 색상 생성함수는 다음에 수정할 App 컴포넌트에서도 사용합니다.
   코드가 중복되므로 해당 함수는 lib 디렉토리에 따로 저장한 후 불러와 사용합니다.
 
   [src/lib/getRandomColor.js]
@@ -35,17 +39,7 @@
   export default function getRandomColor() {
     const colors = [
         '#495057',
-        '#f03e3e',
-        '#d6336c',
-        '#ae3ec9',
-        '#7048e8',
-        '#4263eb',
-        '#1c7cd6',
-        '#1098ad',
-        '#0ca678',
-        '#37b24d',
-        '#74b816',
-        '#f59f00',
+        ...
         '#f76707'
     ];
 
@@ -56,6 +50,6 @@
     return colors[random];
   }
 
-4.CounterListCountainer.js를 다시 열어서 getRandomColor 함수를 제거하고, import해서 씁니다.
+● CounterListCountainer.js를 다시 열어서 getRandomColor 함수를 제거하고, import해서 씁니다.
   [src/containers/CounterListContainer.js]
   import getRandomColor from '../lib/getRandomColor';

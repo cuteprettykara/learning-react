@@ -1,11 +1,17 @@
-1.액션 타입 수정
+● 확장프로그램_설치
+  * 크롬 웹 스토어에서 Redux DevTools를 설치
+  * 개발자 도구 활성화 작업을 해야 작동합니다.
+    [src/index.js]
+    // 스토어 생성
+    const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
-export const CREATE = 'CREATE'; // 카운터를 추가
-export const REMOVE = 'REMOVE'; // 카운터를 제거
+● 액션 타입 수정
+  export const CREATE = 'CREATE'; // 카운터를 추가
+  export const REMOVE = 'REMOVE'; // 카운터를 제거
 
-2.액션 생성 함수 수정
+● 액션 생성 함수 수정
   특정 카운터를 조작할 수 있도록 index값을 액션 객체에 포함해야 합니다.
-  
+
   [src/actions/index.js]
   import * as types from './ActionTypes';
 
