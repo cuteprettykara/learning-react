@@ -1,0 +1,94 @@
+[src/modules/input.js]
+...
+import { Map } from 'immutable';
+...
+const initialState = Map({
+  value: ''
+});
+
+export default handleActions({
+  [SET_INPUT]: (state, action) => state.set('value', action.payload)
+}, initialState);
+
+
+
+
+[src/modules/todos.js]
+...
+import { Map, List } from 'immutable';
+...
+
+// 초기 상태 정의하기
+const initialState = List([
+  Map({
+    id: 0,
+    text: '리액트 공부하기',
+    done: true
+  }),
+  Map({
+    id: 1,
+    text: '컴포넌트 스타일링 해보기',
+    done: false
+  })
+]);
+
+// 리듀서 정의하기
+export default handleActions({
+  [INSERT]: (state, action) => {
+    const { id, text, done } = action.payload;
+
+    return state.push(Map({
+      id,
+      text,
+      done
+    }));
+  },
+  [TOGGLE]: (state, action) => {
+    const { payload: id } = action;
+    const index = state.findIndex(todo => todo.get('id') === id);
+    return state.update(index, todo => todo.set('done', !todo.get('done')));
+  },
+  [REMOVE]: (state, action) => {
+    const { payload: id } = action;
+    const index = state.findIndex(todo => todo.get('id') === id);
+    return state.delete(index);
+  }
+}, initialState);
+
+
+[src/containers/TodoInputContainer.js]
+...
+const mapStateToProps = state => ({
+  value: state.input.get('value')
+});
+...
+
+
+
+
+현재 TodoList 컴포넌트는 todos를
+* [객체]로 구성된 [배열]로 받도록 되어 있습니다.
+* [Map]들로 구성된 [List]를 전달했으니 이에 맞추어 수정해야 합니다.
+
+[src/components/TodoList.js]
+...
+class TodolList extends Component {
+ ...
+
+  render() {
+    ...
+    const todoList = todos.map(todo => (
+        <TodoItem
+          key={todo.get('id')}
+          done={todo.get('done')}
+          onToggle={() => onToggle(todo.get('id'))}
+          onRemove={() => onRemove(todo.get('id'))}
+        >
+          {todo.get('text')}
+        </TodoItem>
+    ));
+    ...
+  }
+}
+
+export default TodolList;

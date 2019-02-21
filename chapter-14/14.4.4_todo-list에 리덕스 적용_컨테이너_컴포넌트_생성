@@ -1,0 +1,64 @@
+[src/containers/TodoInputContainer.js]
+import TodoInput from '../components/TodoInput';
+import { connect } from 'react-redux';
+import * as inputActions from '../modules/input';
+import * as todosActions from '../modules/todos';
+
+let id = 1;
+
+const getId = () => ++id;
+
+const mapStateToProps = state => ({
+  value: state.input.value
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChange: e => dispatch(inputActions.setInput(e.target.value)),
+  onInsert: (text) => {
+    dispatch(todosActions.insert({
+      id: getId(),
+      text: text,
+      done: false
+    }));
+    dispatch(inputActions.setInput(''));
+  }
+});
+
+const mergeProps = (state, dispatch) => ({
+  ...state,
+  ...dispatch,
+  onInsert: () => dispatch.onInsert(state.value)
+});
+
+const TodoInputContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(TodoInput);
+
+export default TodoInputContainer;
+
+
+
+
+
+[src/containers/TodoListContainer.js]
+import TodoList from '../components/TodoList';
+import { connect } from 'react-redux';
+import * as todosActions from '../modules/todos';
+
+const mapStateToProps = state => ({
+  todos: state.todos
+});
+
+const mapDispatchToProps = dispatch => ({
+  onToggle: id => dispatch(todosActions.toggle(id)),
+  onRemove: id => dispatch(todosActions.remove(id))
+});
+
+const TodoListContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList);
+
+export default TodoListContainer;

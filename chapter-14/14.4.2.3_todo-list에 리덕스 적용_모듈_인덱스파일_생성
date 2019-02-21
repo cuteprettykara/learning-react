@@ -1,7 +1,7 @@
 [src/modules/index.js]
+import { combineReducers } from 'redux';
 import input from './input';
 import todos from './todos';
-import { combineReducers } from 'redux';
 
 export default combineReducers({
   input,

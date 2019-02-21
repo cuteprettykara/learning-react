@@ -1,0 +1,57 @@
+Immutable의 Map은 [객체 대신] 사용하는 데이터 구조입니다.
+자바스크립트에 내장된 Map과는 다릅니다.
+
+● 생성
+  * Map 함수 안에 객체를 넣어서 호출합니다.
+
+  * 객체 내부에 또 다른 객체들이 있다면 내부 객체들도 Map으로 감싸 주어야 나중에 사용하기 편합니다
+  (내부에서 Map을 사용하지 않으면 추후 getIn, setIn을 활용할 수 없습니다).
+
+  * 객체를 네트워크에서 받아오거나, 전달받는 객체가 너무 복잡한 상태라면 [일일이 그 내부까지 Map으로 만들기
+    힘들 수도 있겠죠]? 이때는 fromJS를 사용할 수 있습니다.
+
+      const { Map, fromJS} = Immutable;
+
+      const data = fromJS({
+      a: 1,
+      b: 2,
+      c: {
+        d: 3,
+        e: 4,
+        f: 5
+      }
+    });
+
+  * fromJS를 사용하면 내부에 있는 객체들은 Map을 쓰지 않아도 됩니다.
+
+  * 자바스크립트 객체로 변환(Immutable 객체 => 일반 객체)
+    const deserialized = data.toJS();
+
+● 조회
+  * 특정 키의 값 불러오기
+    data.get('a');  // 1
+
+  * 깊숙이 위치하는 값 불러오기
+    data.getIn(['c', 'd'])  // 3
+
+● 수정
+  * 값 설정
+    const newData = data.set('a', 4);
+    console.log(newData === data);    // false
+    => set을 한다고 해서 데이터가 실제로 변하는 것은 아닙니다.
+      주어진 변화를 적용한 새 Map을 만드는 것입니다.
+
+  * 깊숙이 위치하는 값 수정
+    const newData = data.setIn(['c', 'd'], 10);
+    => 내부에 있는 객체들도 Map 형태여야만 사용할 수 있다는 점에 주의하세요.
+
+● 여러 값 동시에 수정
+  * c.d값과 c.e값을 동시에 바꾸어야 할 때
+    const newData = data.mergeIn(['c'], {d: 10, e: 10}); or
+    const newData = data.setIn(['c', 'd'], 10)
+                        .setIn(['c', 'e'], 10);
+    => 성능상으로는 set을 여러 번 하는 것이 더 빠릅니다.
+    => 그러나 시간의 차이는 미미하므로, 어떤 방식으로 해도 상관없습니다.
+
+  * 최상위에서 merge를 해야 할 때
+    const newData = data.merge({a: 10, b: 10});

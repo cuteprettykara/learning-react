@@ -6,7 +6,6 @@
 * 리액트 컴포넌트는 List 데이터 구조와 호환이 되기 때문에,
   map함수를 사용하여 데이터가 들어 있는 List를 컴포넌트 List로 변환하여 JSX에서 보여주어도 제대로 렌더링됩니다.
 
-
 ● 생성
   const { List } = Immutable;
   const list = List([0, 1, 2, 3, 4]);
@@ -29,7 +28,7 @@
   * Map과 마찬가지로, List도 toJS를 사용하여 일반 배열로 변환할 수 있습니다.
     이 과정에서 내부에 있는 Map 객체들도 자바스크립트 객체로 변환됩니다.
 
-● 값 읽어 오기
+● 조회
   * n 번째 원소 값은 get(n)을 사용하여 읽어 옵니다.
     list.get(0);
 
@@ -43,10 +42,10 @@
   * 원소의 Map 내부 값을 변경하고 싶을 때
     const newList = list.setIn([0, 'value'], 10);
 
-  * 값을 업데이트해야 하는데, 기존 값을 참조해야 할 경우
+  * 값을 업데이트해야 하는데, [기존 값을 참조해야 할 경우]
     const newList = list.update(0, item => item.set('value', item.get('value') * 5));
 
-  * update를 사용하지 않는다면
+  * 값을 업데이트해야 하는데, [기존 값을 참조해야 할 경우] : update를 사용하지 않는다면
     const newList = list.setIn([0, 'value'], list.getIn([0, 'value']*5));
 
 ● 아이템 추가
@@ -58,10 +57,11 @@
 
 ● 아이템 제거
   * delete 이용
-    const newList = list.delete(1);
+    const newList = list.delete(1); // 인덱스가 1인 아이템 제거
 
   * 내장함수 이용
     const newList = list.pop();   // 마지막 아이템 제거
+    const newList = list.shift(); // 맨 앞  아이템 제거
 
 ● List 크기 가져오기
   * length가 아니라, size를 참조해야 합니다.

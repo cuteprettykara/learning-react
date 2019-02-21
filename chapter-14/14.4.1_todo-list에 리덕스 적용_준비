@@ -5,12 +5,15 @@
   * modules : Ducks 구조를 적용한 리덕스 관련 코드가 들어감.
   * containers : 리덕스 스토어에 연결된 컴포넌트가 들어감.
 
-2.모듈 생성
+3.모듈 생성
+  학습 차원에서 두 가지 모듈로 분리하여 작업하겠습니다.
   * input 모듈: input 상태를 관리
   * todos 모듈: 일정들의 상태를 관리
 
-3.스토어 생성 및 설정
+4.스토어 생성 및 설정
 
-4.컨테이너 컴포넌트 생성
+5.컨테이너 컴포넌트 생성
   * TodoInputContainer
   * TodoListContainer
+
+6.immutable 적용
