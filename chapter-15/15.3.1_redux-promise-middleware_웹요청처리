@@ -1,5 +1,5 @@
 * 설치
-  $ cd redux-starter-kit/
+  $ yarn add redux-promise-middleware
 
 * [Promise 객체를 payload로 전달]하면 요청을 시작,성공,실패할 때 액션의 뒷부분에
   _PENDING, _FULFILLED, _REJECTED를 붙여서 반환합니다.
@@ -9,6 +9,7 @@
   FULFILLED, REJECTED 대신 SUCCESS, FAILURE를 사용하니 이를 임의의 값으로 설정하겠습니다.
 
   [src/store.js]
+  1. (5.X 버전)
   ...
   import promiseMiddleware from 'redux-promise-middleware';
 
@@ -20,17 +21,48 @@
   const store = createStore(modules, applyMiddleware(logger, pm));
   ...
 
-* 액션 생성자 수정
-  [src/post.js]
+  2. (6.X 버전)
   ...
-  const GET_POST = 'GET_POST';
+  import { createStore, applyMiddleware, compose} from 'redux';
+  import { createPromise } from "redux-promise-middleware";
+
+  const logger = createLogger();
+  const cp = createPromise({
+    promiseTypeSuffixes: ['PENDING', 'SUCCESS', 'FAILURE']
+  });
+
+  const store = createStore(modules, compose(
+    applyMiddleware(logger, cp),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  ));
   ...
 
-  export const getPost = postId => ({
+* 액션 생성자 수정
+  [src/post.js]
+  import { handleActions } from 'redux-actions';
+  import axios from 'axios';
+
+  function getPostAPI(postId) {
+    return axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+  }
+
+  const GET_POST = 'GET_POST';  // 추가
+  const GET_POST_PENDING = 'GET_POST_PENDING';
+  const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
+  const GET_POST_FAILURE = 'GET_POST_FAILURE';
+
+  export const getPost = (postId) => ({
     type: GET_POST,
     payload: getPostAPI(postId)
   });
-  ...
+
+  const initialState = {
+    ...
+  };
+
+  export default handleActions({
+    ...
+  }, initialState);
 
 * 어떤가요? 코드가 많이 깔끔하죠?
   기존 thunk 함수에서는

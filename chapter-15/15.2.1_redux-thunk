@@ -6,10 +6,10 @@
 
 ● redux-thunk
   이 미들웨어는 [객체]가 아닌 [함수]도 디스패치할 수 있게 합니다.
-  일반 액션 객체로는 특정 액션을 디스패치한 후
 
-  * [몇 초 뒤에] 반영시키거나
-  * [현재 상태]에 따라 아예 무시하게 만들 수 없습니다.
+  [일반] 액션 객체로는 특정 액션을 디스패치한 후
+    * [몇 초 뒤에] 반영시키거나
+    * [현재 상태]에 따라 아예 무시하게 만들 수 없습니다.
 
   redux-thunk 미들웨어는 [함수를 디스패치]할 수 있게 함으로써 일반 액션 객체로는 할 수 없는
   작업들도 할 수 있게 합니다.
@@ -22,7 +22,6 @@
       };
     };
 
-
   * 1초 뒤에 액션이 디스패치되는 예제 코드
     function incrementAsync() {
 
@@ -34,7 +33,6 @@
       }
     }
     store.dispatch(incrementAsync()); // 1초 뒤에 디스패치합니다.
-
 
   * 조건(현재 상태)에 따라 액션을 디스패치하거나 무시하는 예제 코드
     function incrementIfOdd() {
@@ -53,7 +51,7 @@
 
 ● thunk 생성 함수
   객체가 아니라 이렇게 함수(dispatch와 getState를 파라미터로 가지는 함수)를 반환하는 함수는
-  액션 생성 함수라 하지 않고, thunk 생성 함수라고 합니다.
+  [액션 생성 함수]라 하지 않고, thunk 생성 함수라고 합니다.
 
 ● 설치
   $ yarn add redux-thunk
@@ -69,14 +67,7 @@
 
 ● 카운터를 비동기적으로 생성
   [src/modules/counter.js]
-  import { handleActions, createAction } from 'redux-actions';
-
-  const INCREMENT = 'INCREMENT';
-  const DECREMENT = 'DECREMENT';
-
-  export const increment = createAction(INCREMENT);
-  export const decrement = createAction(DECREMENT);
-
+  ...
   export const incrementAsync = () => dispatch => {
       // 1초 뒤 액션 디스패치
       setTimeout(() => {
@@ -85,15 +76,12 @@
   };
 
   export const decrementAsync = () => dispatch => {
+      // 1초 뒤 액션 디스패치
       setTimeout(() => {
           dispatch(decrement())
       }, 1000);
   };
-
-  export default handleActions({
-      [INCREMENT]: (state, action) => state + 1,
-      [DECREMENT]: (state, action) => state - 1
-  }, 0);
+  ...
 
   [src/App.js]
   ...
@@ -101,7 +89,7 @@
   <button onClick={CounterActions.decrementAsync}>-</button>
 
   [결과화면]
-  action undefined @ 10:31:08.164 => 1. 함수형 액션을 먼저 디스패치하고,
+  action undefined @ 10:31:08.164 => 1. [함수형 액션]을 먼저 디스패치하고,
 	  prev state {counter: 0}
 	  action  ƒ (dispatch) {
               // 1초 뒤 액션 디스패치
@@ -111,7 +99,7 @@
             }
 	  next state {counter: 0}
 
-  action INCREMENT @ 10:31:09.166 => 2. 1초 뒤에 우리가 지정한 액션을 디스패치합니다.
+  action INCREMENT @ 10:31:09.166 => 2. 1초 뒤에 [우리가 지정한 액션]을 디스패치합니다.
     prev state {counter: 0}
     action     {type: "INCREMENT"}
     next state {counter: 1}

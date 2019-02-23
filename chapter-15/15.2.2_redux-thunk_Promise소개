@@ -50,7 +50,7 @@
 
   여기에서 반환되는 결과값과 오류는 .then 또는 .catch에 전달하는 함수의 파라미터로 설정됩니다.
 
-  결과가 5이상이면 오류를 발생시키고, 5미만이면 현재 값에서 1을 더한 값을 반환하는 Promise
+● 결과가 5이상이면 오류를 발생시키고, 5미만이면 현재 값에서 1을 더한 값을 반환하는 Promise
   function printLater(number) {
     return new Promise((resolve, reject) => {       // 새 Promise를 만들어서 리턴합니다.
       if (number > 4) {

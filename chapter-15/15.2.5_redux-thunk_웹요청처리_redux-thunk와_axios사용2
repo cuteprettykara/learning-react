@@ -7,7 +7,7 @@
 
   [src/App.js]
   ...
-  import * as postActions from './modules/index';
+  import * as postActions from './modules/post';
 
   class App extends Component {
       componentDidMount() {

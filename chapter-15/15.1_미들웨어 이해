@@ -7,7 +7,7 @@
 ● 미들웨어가 할 수 있는 작업들
   * 전달받은 액션을 콘솔에 기록,
   * 액션을 아예 취소하거나, 다른 종류의 액션을 추가로 디스패치
-
+  * 네트워크 요청과 같은 비동기 작업
 
 [미들웨어 생성]
 ● 준비작업
@@ -20,6 +20,49 @@
 
   * 간단한 숫자 카운터가 구현되어 있으며
   * store 생성 로직은 store.js 파일로 분리했습니다.
+
+  [src/modules/counter.js]
+  import { handleActions, createAction } from 'redux-actions';
+
+  const INCREMENT = 'INCREMENT';
+  const DECREMENT = 'DECREMENT';
+
+  export const increment = createAction(INCREMENT);
+  export const decrement = createAction(DECREMENT);
+
+  export default handleActions({
+      [INCREMENT]: (state, action) => state + 1,
+      [DECREMENT]: (state, action) => state - 1
+  }, 0);
+
+  [src/App.js]
+  import React, { Component } from 'react';
+  import { bindActionCreators } from 'redux';
+  import { connect } from 'react-redux';
+  import * as counterActions from './modules/counter';
+
+  class App extends Component {
+    render() {
+      const { CounterActions, number } = this.props;
+
+      return (
+        <div>
+          <h1>{number}</h1>
+          <button onClick={CounterActions.increment}>+</button>
+          <button onClick={CounterActions.decrement}>-</button>
+        </div>
+      );
+    }
+  }
+
+  export default connect(
+      (state) => ({
+          number: state.counter
+      }),
+      (dispatch) => ({
+          CounterActions: bindActionCreators(counterActions, dispatch)
+      })
+  )(App);
 
 ● 로거 미들웨어 생성
   [src/lib/loggerMiddleware.js]
@@ -62,7 +105,6 @@
 
 ● 실행
   $ yarn start
-
 
 [redux-logger 라이브러리 사용]
 ● 설치
