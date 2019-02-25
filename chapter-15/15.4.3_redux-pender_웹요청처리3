@@ -35,6 +35,9 @@
     */
   ]);
 
+* 이제 post 리듀서에서 error값과 pending값을 더 이상 관여하지 않고, pender 리듀서가 대신 하게 되었습니다.
+  이를 컴포넌트 쪽에도 반영해 볼까요?
+
   [src/App.js]
   export default connect(
     (state) => ({
