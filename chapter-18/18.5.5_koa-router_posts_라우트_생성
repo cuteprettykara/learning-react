@@ -1,4 +1,4 @@
-이번에는 api 라우트 내부에 posts 라우트를 만들어 보겠습니다.
+이번에는 [api 라우트 내부에] posts 라우트를 만들어 보겠습니다.
 
 ● src/api/posts 디렉토리를 만들고, 그 내부에 index.js파일을 만드세요.
   [src/api/posts/index.js]

@@ -50,26 +50,28 @@ $ esLint -v
   v5.13.0
 
 * 설치가 끝나면 현재 프로젝트에 적용해 보겠습니다.
-$ yarn add eslint
-$ eslint --init
-? How would you like to configure ESLint? Answer questions about your style
-? Which version of ECMAScript do you use? ES2015
-? Are you using ES6 modules? Yes
-? Where will your code run? (Press <space> to select, <a> to toggle all, <i> to invert selection)Browser, Node
-? Do you use CommonJS? No
-? Do you use JSX? Yes
-? Do you use React? Yes
-? What style of indentation do you use? Tabs
-? What quotes do you use for strings? Single
-? What line endings do you use? Windows
-? Do you require semicolons? Yes
-? What format do you want your config file to be in? JavaScript
-Local ESLint installation not found.
-The config that you've selected requires the following dependencies:
+  $ eslint --init
+  ? How would you like to configure ESLint? Use a popular style guide
+  ? Which style guide do you want to follow? Airbnb (https://github.com/airbnb/javascript)
+  ? Do you use React? No
+  ? What format do you want your config file to be in? JavaScript
+  Checking peerDependencies of eslint-config-airbnb-base@latest
+  The config that you've selected requires the following dependencies:
 
-eslint-plugin-react@latest eslint@latest
-Successfully created .eslintrc.js file in D:\Documents\JavaScript\React\learning-react\blog\blog-backend
-ESLint was installed locally. We recommend using this local copy instead of your globally-installed copy.
+  eslint-config-airbnb-base@latest eslint@^4.19.1 || ^5.3.0 eslint-plugin-import@^2.14.0
+  ? Would you like to install them now with npm? Yes
+  Installing eslint-config-airbnb-base@latest, eslint@^4.19.1 || ^5.3.0, eslint-plugin-import@^2.14.0
+  npm notice created a lockfile as package-lock.json. You should commit this file.
+  npm WARN blog-backend@1.0.0 No description
+  npm WARN blog-backend@1.0.0 No repository field.
+
+  + eslint-config-airbnb-base@13.1.0
+  + eslint-plugin-import@2.16.0
+  + eslint@5.14.1
+  added 50 packages from 37 contributors, updated 156 packages and audited 328 packages in 14.732s
+  found 0 vulnerabilities
+
+  Successfully created .eslintrc.js file in E:\복습\blog\blog-backend
 
 * VSCode의 ESLint 확장프로그램을 설치하세요.
 
@@ -79,9 +81,23 @@ ESLint was installed locally. We recommend using this local copy instead of your
   const hello = 'hello';
 
 * ESLint 커스터마이징
-생략...
+  지금은 ESLint의 설정이 조금 엄격하게 잡혀 있습니다.
+  * console.log() 도 사용하지 못하게 경고 표시를 하지요.
+  * 또 객체를 만들 때는 마지막 키의 뒷부분에도 쉼표를 넣어야 합니다.
 
-숫자 의미
-* 0: 아무것도 안함
-* 1: 경고
-* 2: 오류
+  .eslintrc.js 파일을 열어 다음과 같이 수정하세요.
+  module.exports = {
+    "extends": "airbnb-base",
+    "rules": {
+      "no-unused-vars": 1,
+      "comma-dangle": 0,
+      "eol-last": 0,
+      "no-console": 0,
+      "linebreak-style": 0
+    }
+  };
+
+  숫자 의미
+  * 0: 아무것도 안함
+  * 1: 경고
+  * 2: 오류

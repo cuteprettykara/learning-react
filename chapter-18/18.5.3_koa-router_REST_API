@@ -8,9 +8,9 @@
 REST API는 요청 종류에 따라 다른 HTTP 메소드를 사용합니다.
 * GET     : 조회
 * POST    : 등록
-* PUT     : 새 정보로 통째로 교체
+* PUT     : 새 정보로 [통째로] 교체
 * DELETE  : 삭제
-* PATCH   : 특정 필드를 수정
+* PATCH   : [특정 필드]를 수정
 
 ● 블로그 포스트용 REST API 예시
 POST /posts                           : 포스트 작성
@@ -21,5 +21,3 @@ PATCH /posts/:id                      : 특정 포스트 업데이트
 POST /posts/:id/comments              : 특정 포스트 댓글 등록
 GET /posts/:id/comments               : 특정 포스트 댓글 목록 조회
 DELETE /posts/:id/comments/:commentId : 특정 포스트 특정 댓글 삭제
-
-

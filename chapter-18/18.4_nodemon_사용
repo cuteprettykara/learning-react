@@ -23,4 +23,3 @@ start:dev 스크립트가 실행되면 nodemon도 실행되게 했는데요.
 
 $yarn start     -> node src 명령어와 동일하게 단순히 서버를 실행시킵니다.
 $yarn start:dev -> 코드를 변경할 때마다 서버를 재시작합니다.
-
