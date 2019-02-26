@@ -11,7 +11,7 @@ Post 페이지 컴포넌트에서 location을 조회하면 다음 결과가 나�
  }
 
 * 주로 search 값에서 URL Query를 읽는데 사용하거나
-* 주소가 바뀐 것을 감지하는데 사용합니다.
+* [주소가 바뀐 것을 감지]하는데 사용합니다.
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.location !== this.props.location) {
@@ -44,7 +44,7 @@ match는 <Route>컴포넌트에서 설정한 path와 관련된 데이터들을 �
 
 match 객체는 주로
 * params를 조회하거나
-* 서브라우트를 만들 때, 현재 path를 참조하는 데 사용합니다.
+* [서브라우트를 만들 때], 현재 path를 참조하는 데 사용합니다.
 
 
 [history]
@@ -70,13 +70,13 @@ Props
   ...
 
 이 객체에서 헷갈릴 수 있는 함수는 push와 replace입니다.
-replace는 replace('/posts') 형식으로 작성하는데요.
 
-push와의 차이점은 페이지 방문 기록을 남기지 않아서 페이지 이동 후 뒤로가기 버튼을 눌렀을 때,
+replace는 replace('/posts') 형식으로 작성하는데요.
+push와의 차이점은 페이지 [방문 기록을 남기지 않아서] 페이지 이동 후 뒤로가기 버튼을 눌렀을 때,
 방금 전의 페이지가 아니라 방금 전의 전 페이지가 나타납니다.
 
-action은 현재 history 상태를 알려 줍니다.
-* 페이지를 처음 방문했을 때: Pop
+action은 [현재 history 상태]를 알려 줍니다.
+* 페이지를 처음 방문했을 때: POP
 * 링크를 통한 라우팅 또는 push를 통한 라우팅을 했을 때: PUSH
 * replace를 통한 라우팅을 했을 때: REPLACE
 
@@ -87,7 +87,7 @@ ex)
   //막는 작업을 취소할 때:
   unblock();
 
-go, goBack, goForward는 이전 도는 다음 페이지로 이동하는 함수입니다.
+go, goBack, goForward는 이전 페이지 또는 다음 페이지로 이동하는 함수입니다.
 
 * go(-1) : 뒤로가기
 * go(1)  : 다음으로 가기

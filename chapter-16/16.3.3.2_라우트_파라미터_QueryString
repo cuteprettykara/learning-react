@@ -2,7 +2,7 @@ Query String : ~/about/something?key=value&anotherKey=value
 
 이 문자열로 된 쿼리를 객체 형태로 파싱하려면 query-string 라이브러리를 설치해야 합니다.
 
-Query String은 App.js에서 라우트를 설정할 때 정의하지 않고, 라우트 내부에서 정의합니다.
+Query String은 App.js에서 [라우트를 설정할 때 정의하지 않고], [라우트 내부에서] 정의합니다.
 
 Query 내용을 받아오려면 라우트로 설정된 컴포넌트에서 받아 오는 props중 하나인
 location 객체의 search값을 조회해야 합니다.

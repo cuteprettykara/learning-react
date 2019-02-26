@@ -1,4 +1,4 @@
-1.프로젝트 개성
+1.프로젝트 생성
   $ create-react-app react-router-tutorial
 
 2.react-router 설치
@@ -9,14 +9,14 @@
   * App.test.js
   * logo.svg
 
-4.디렉토로 생성
+4.디렉토리 생성
   * src/components
   * src/pages     : 각 라우트들이 위치
 
 5.NODE_PATH 설정
   * 컴포넌트나 모듈을 import할 때 보통 상대 경로로 불러옵니다.
   * 디렉토리 구조가 깊어질수록 '../../../components/MyComponent' 이런 식으로 ../를 엄청나게 많이 작성해야 하므로 헷갈릴 수 있습니다.
-    => 프로젝트의 루트 경로를 지정하여 파일을 절대 경로로 불러오면 쉽게 해결할 수 있습니다.
+    => [프로젝트의 루트 경로]를 지정하여 파일을 절대 경로로 불러오면 쉽게 해결할 수 있습니다.
   * 우선 package.json 파일을 열어 scripts의 start와 build를 다음과 같이 수정
 
     "scripts": {
@@ -36,5 +36,5 @@
 
     이렇게 설정하면 파일을 절대경로로 불러올 수 있습니다(src 디렉토리를 기준으로).
 
-  * 이런 설정은 webpack의 resolve 기능을 사용하는데, create-react-app으로 만든 프로젝트에서는
-    NODE_PATH로 설정된 경로를 자동으로 resolve하기 때문에, 별도로 webpack 설정을 변경할 필요가 없습니다.
+  * 이런 설정은 webpack의 resolve 기능을 사용하는데, [create-react-app으로 만든 프로젝트에서는]
+    ★ NODE_PATH로 설정된 경로를 자동으로 resolve하기 때문에 ★, 별도로 webpack 설정을 변경할 필요가 없습니다.
