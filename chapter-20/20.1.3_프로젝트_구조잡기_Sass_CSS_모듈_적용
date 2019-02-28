@@ -1,0 +1,6 @@
+$ yarn add node-sass css-module classnames
+
+설치를 완료한 후에는 전역적으로 사용하는 스타일들을 편하게 불러올 수 있도록 config/path.js
+파일 아래쪽에 globalStyles를 추가하세요. ?
+  ...
+  globalStyles: resolveApp('src/styles')

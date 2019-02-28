@@ -1,0 +1,11 @@
+● src 내부에 주요 디렉토리를 만드세요.
+  * components  : 리덕스 상태에 연결되지 않은 프리젠테이셔널 컴포넌트들.
+                  각 컴포넌트의 스타일도 이 디렉토리에 넣습니다.
+  * containers  : 리덕스 상태와 연결된 컨테이너 컴포넌트들
+  * lib         : backend API 함수들과 코드 스플리팅할 때 사용하는 asyncRoute들
+  * pages       : 라우터에서 사용할 각 페이지 컴포넌트들
+  * store       : Ducks 구조를 적용시킨 리덕스 모듈들과 스토어 생성 함수
+  * styles
+
+● 불필요한 파일 제거
+  App.css, App.js, App.test.js, index.css, logo.svg를 제거하세요.

@@ -1,0 +1,90 @@
+● 리덕스를 설정하려면 프로젝트에 필요한 모듈들을 먼저 만들어야 합니다.
+  * base  : 로그인 상태, 삭제 및 로그인할 때 보이는 모달 상태를 다룹니다.
+  * editor: 마크다운 에디터 상태를 다룹니다.
+  * list  : 포스트 목록 상태를 다룹니다.
+  * post  : 단일 포스트 상태를 다룹니다.
+
+  이 모듈들의 세부 코드는 나중에 작성하겠습니다.
+  지금은 store 디렉토리에 modules 디렉토리를 만들고,
+  base.js, editor.js, list.js, post.js 파일들을 내부에 생성하여 동일한 내용으로 코드를 작성하세요.
+
+  [src/store/modules/base.js editor.js list.js post.js]
+  import { createAction, handleActions } from "redux-actions";
+  import { Map } from "immutable";
+
+  // action types
+
+  // action creators
+
+  // initial state
+  const initialState = Map({
+
+  });
+
+  // reducer
+  export default handleActions({
+
+  }, initialState);
+
+● 이 모듈들을 전부 불러와 내보낼 인덱스 파일을 만들겠습니다. 이 과정에서
+  비동기 액션을 관리하는 redux-pender의 penderReducer도 불러와 내보내겠습니다.
+  [src/store/modules/index.js]
+  export { default as editor } from './editor';
+  export { default as list } from './list';
+  export { default as post } from './post';
+  export { default as base } from './base';
+  export { penderReducer as pender } from 'redux-pender';
+
+● configure.js 파일을 만들어 [스토어를 생성하는 함수]인 configure를 구현하겠습니다.
+  함수를 따로 만드는 이유는 스토어를 클라이언트에서 생성하지만,
+  추후 서버사이드 렌더링을 할 때 서버에서도 호출해야 하기 때문입니다.
+
+  방금 만든 모듈들을
+  * combineReducers로 합쳐 주고,
+  * penderMiddleware도 적용하겠습니다.
+  * 그리고 개발환경에서는 Redux Devtools를 사용하도록 설정하세요.
+
+  [src/store/configure.js]
+  import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+  import penderMiddleware from 'redux-pender';
+  import * as modules from './modules';
+
+  const reducers = combineReducers(modules);
+  const middlewares = [penderMiddleware()];
+
+  // 개발 모드일 때만 Redux Devtools를 적용합니다.
+  const isDev = process.env.NODE_ENV === 'development';
+  const devtools = isDev && window.__REDUX_DEV_TOOLS_EXTENSION_COMPOSE__;
+  const composeEnhancers = devtools || compose;
+
+  // preloadedState는 추후 서버사이드 렌더링을 했을 때 전달받는 초기 상태입니다.
+  const configure = (preloadedState) => createStore(reducers, preloadedState, composeEnhancers(
+    applyMiddleware(...middlewares)
+  ));
+
+  export default configure;
+
+● Root 컴포넌트에서 configure 함수를 호출하여 스토어를 생성하고,
+  Provider 컴포넌트로 BrowserRouter를 감싸세요.
+  [src/Root.js]
+  import React from 'react';
+  import App from 'components/App';
+  import { BrowserRouter } from "react-router-dom";
+  import { Provider } from "react-redux";
+  import configure from './store/configure';
+
+  const store = configure();
+
+  const Root = () => {
+    return (
+      <div>
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </div>
+    );
+  };
+
+  export default Root;

@@ -1,0 +1,43 @@
+프로젝트에서 필요한 라우트에서 사용할 페이지 컴포넌트들을 미리 만들어 보겠습니다.
+1. 홈
+2. 포스트 목록
+3. 포스트 목록(태그 설정)
+4. 포스트 읽기
+5. 에디터
+6. 404 페이지
+
+여기에서 1~3번 라우트는 같은 컴포넌트를 공유합니다.
+모두 포스트 목록을 보여주지만 설정은 서로 다릅니다.
+
+● pages 디렉토리에 다음 컴포넌트들을 만드세요.
+  [src/pages/ListPages.js]
+  import React from 'react';
+
+  const ListPage = () => {
+    return (
+      <div>
+        List
+      </div>
+    );
+  };
+
+  export default ListPage;
+
+  [src/pages/PostPage.js]
+  ...
+
+  [src/pages/EditorPage.js]
+  ...
+
+  [src/pages/NotFoundPage.js]
+  ...
+
+● 인덱스 파일을 만드세요.
+  [src/pages/index.js]
+  export { default as ListPage } from './ListPage';
+  export { default as PostPage } from './PostPage';
+  export { default as EditorPage } from './EditorPage';
+  export { default as NotFoundPage } from './NotFoundPage';
+
+● 이 컴포넌트들을 불러와 App 컴포넌트에서 라우트를 적용하세요.
+  
