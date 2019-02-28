@@ -1,8 +1,15 @@
 ● 설치
-  https://www.mongodb.com/download-center/community 에서 인스톨러를 내려 받아 설치
+  * macOS
+    Homebrew를 이용하여 설치
 
-  * DB 저장  경로: C:\data\db
-  * 프로그램 경로: C:\Program Files\MongoDB\Server\버전\bin
+  * Windows
+    https://www.mongodb.com/download-center/community 에서 인스톨러를 내려 받아 설치
+
+    ◦ DB 저장  경로: C:\data\db
+    ◦ 프로그램 경로: C:\Program Files\MongoDB\Server\버전\bin
+
+  * Linux
+    공식 사이트(https://goo.gl/wnY6ZY)의 설치 방법을 참고
 
 ● 작동확인
   [Windows]

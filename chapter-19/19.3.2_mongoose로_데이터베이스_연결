@@ -9,7 +9,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true })
    .catch(e => console.error(e));
 ...
 
-mongoose에서 DB에 요청할 때, 이를 Promise 기반으로 처리할 수 있는데요.
+mongoose에서 [DB에 요청할 때], 이를 Promise 기반으로 처리할 수 있는데요.
 이때 어떤 형식의 Promise를 사용할지 정해야 합니다.
 (Node v7 이전에는 공식적인 Promise가 없어 bluebird, Promise/A+ 등 여러 구현체가 있었습니다.
  이제는 Node.js 자체에 Promise를 내장하고 있으므로, 내장된 Promise를 사용하도록 설정해 주어야 합니다.)

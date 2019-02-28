@@ -1,0 +1,7 @@
+MongoDB를 PC에 설치했다면 터미널에서 mongo 명령어를 입력하여
+DB에 직접 접속해서 데이터를 조회하고 변경할 수 있습니다.
+
+하지만 mongo 명령어에 익숙하지 않은 상태라면 조금 불편할 수도 있는데요.
+Robo 3T는 MongoDB를 편하게 조회/변경할 수 있는 GUI를 제공합니다.
+
+내려받기 페이지: https://robomongo.org/download

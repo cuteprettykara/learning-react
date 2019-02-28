@@ -32,5 +32,5 @@
   ● title 부분만 수정을 요청해 보겠습니다.
     PATCH http://localhost:4000/api/posts/5c613ad99acedf569c142956
     {
-    "title": "제목",
-  }
+      "title": "제목 바뀜",
+    }
