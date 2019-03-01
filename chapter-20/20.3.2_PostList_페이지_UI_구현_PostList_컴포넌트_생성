@@ -1,0 +1,115 @@
+● PostList 컴포넌트
+  PostList 컴포넌트는 블로그 목록 데이터를 받아와 이를 렌더링합니다.
+  우리는 PostList 컴포넌트 내부에 PostItem 컴포넌트를 만들고, 이를 반복적으로 렌더링하겠습니다.
+  지금은 UI만 만드는 중이므로, 더미 데이터를 입력하여 보여 주세요.
+
+  [src/components/list/PostList/PostList.js]
+  import React from 'react';
+  import styles from './PostList.scss';
+  import classNames from 'classnames/bind';
+  import { Link } from 'react-router-dom';
+
+  const cx = classNames.bind(styles);
+
+  const PostItem = () => {
+    return (
+      <div className={cx('post-item')}>
+        <h2><a>타이틀</a></h2>
+        <div className={cx('date')}>2019-03-01</div>
+        <p>내용</p>
+        <div className={cx('tags')}>
+          <a>#태그</a>
+          <a>#태그</a>
+          <a>#태그</a>
+        </div>
+      </div>
+    );
+  };
+
+  const PostList = () => {
+    return (
+      <div className={cx('post-list')}>
+        <PostItem />
+        <PostItem />
+        <PostItem />
+        <PostItem />
+      </div>
+    );
+  };
+
+  export default PostList;
+
+● PostList.scss
+  [src/components/list/PostList/PostList.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .post-list {
+    .post-item {
+      padding: 1.5rem;
+      transition: all .15s ease-in;
+      h2 {
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 0;
+        color: $oc-gray-8;
+        a {
+          transition: all .15s ease-in; // 스타일 바뀔 때 애니메이션 효과
+          border-bottom: 1px solid transparent;
+        }
+        a:hover {
+          color: $oc-blue-6;
+          // 마우스 호버 시 밑줄(밑줄과 글자 사이 여백, 얇은 밑줄을 위해 border-bottom 사용)
+          border-bottom: 1px solid $oc-blue-6; 
+        }
+      }
+      .date {
+        font-size: 0.85rem;
+        color: $oc-gray-5;
+      }
+      p {
+        font-weight: 300;
+        color: $oc-gray-7;
+      }
+      .tags {
+        font-size: 0.85rem;
+        color: $oc-blue-6;
+        a {
+          &:hover {
+            color: $oc-blue-5;
+            text-decoration: underline;
+          }
+        }
+        a + a { // 태그 사이 여백
+          margin-left: 0.25rem;
+        }
+      }
+      &:hover {
+        // 호버 시 배경색 변경
+        background: rgba($oc-blue-6, 0.05);
+      }
+    }
+    .post-item + .post-item { // 아이템 사이 여백
+      border-top: 1px solid $oc-gray-3;
+    }
+  }
+
+● 이 컴포넌트를 ListPage에 불러와 ListWrapper 내부에 렌더링하세요.
+  [src/pages/ListPage.js]
+  ...
+  import PostList from 'components/list/PostList';
+
+  const ListPage = () => {
+    return (
+      <div>
+        <PageTemplate>
+          <ListWrapper>
+            <PostList />
+          </ListWrapper>
+        </PageTemplate>
+      </div>
+    );
+  };
+  ...
+
+● 웹 브라우저를 열어 PostList 컴포넌트가 잘 나타나는지 확인

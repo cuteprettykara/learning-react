@@ -1,0 +1,74 @@
+Pagination 컴포넌트에는 중간에 '페이지' 표시가 있고, 양쪽에 버튼이 두 개 있습니다.
+* 첫 번째 페이지를 보고 있을 때는 왼쪽 버튼을 비활성화하고,
+* 마지막 페이지를 보고 있을 때는 오른쪽 버튼을 비활성화합니다.
+
+● Pagination 컴포넌트 생성
+  * 버튼을 만들 때 theme값을 지정하지 않으면 default로 설정되어 파란색으로 나타나고,
+  * disabled값이 true면 버튼을 비활성화시켜서 회색으로 나타납니다.
+
+  [src/components/list/Pagination/Pagination.js]
+  import React from 'react';
+  import styles from './Pagination.scss';
+  import classNames from 'classnames/bind';
+  import Button from 'components/common/Button';
+
+  const cx = classNames.bind(styles);
+
+  const Pagination = () => {
+    return (
+      <div className={cx('pagination')}>
+        <Button disabled>
+          이전 페이지
+        </Button>
+        <div className={cx('number')}>
+          페이지 1
+        </div>
+        <Button>
+          다음 페이지
+        </Button>
+      </div>
+    );
+  };
+
+  export default Pagination;
+
+● Pagination.scss
+  [src/components/list/Pagination/Pagination.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .pagination {
+    margin-top: 2rem;
+
+    // 중앙에 세로로 정렬
+    display: flex;
+    align-items: center;
+
+    .number {
+      font-size: 0.85rem;
+      text-align: center;
+      color: $oc-gray-6;
+      flex: 1; // 남은 공간을 다 차지
+    }
+  }
+
+● 이 컴포넌트를 ListPage에서 PostList 아래에 렌더링합니다.
+  [src/pages/ListPage.js]
+  ...
+  import Pagination from 'components/list/Pagination';
+
+  const ListPage = () => {
+    return (
+      <div>
+        <PageTemplate>
+          <ListWrapper>
+            <PostList />
+            <Pagination />
+          </ListWrapper>
+        </PageTemplate>
+      </div>
+    );
+  };
+  ...
+
+● 웹 브라우저를 열어 Pagination 컴포넌트가 잘 나타나는지 확인

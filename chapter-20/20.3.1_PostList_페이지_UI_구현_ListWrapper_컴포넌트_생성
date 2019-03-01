@@ -1,0 +1,73 @@
+components 디렉토리에 list 디렉토리를 만들고, 내부에는 Generate new component 메뉴를 사용하여
+다음 컴포넌트들을 만드세요.
+
+* ListWrapper : 페이지 내부의 컴포넌트들을 감싸 줍니다.
+* PostList    : 포스트 목록을 보여 줍니다.
+* Pagination  : 다음,이전 페이지로 이동합니다.
+
+● ListWrapper 컴포넌트
+  * 내부 내용을 페이지 한 가운데에 정렬시켜주고,
+  * 위아래에 패딩이 설정되어 있으며,
+  * 웹 브라우저 크기에 따라 화면 크기를 조정합니다.
+
+  [src/components/list/ListWrapper/ListWrapper.js]
+  import React from 'react';
+  import styles from './ListWrapper.scss';
+  import classNames from 'classnames/bind';
+
+  const cx = classNames.bind(styles);
+
+  const ListWrapper = ({children}) => {
+    return (
+      <div className={cx('list-wrapper')}>
+        {children}
+      </div>
+    );
+  };
+
+  export default ListWrapper;
+
+● ListWrapper.scss
+  [src/components/list/ListWrapper/ListWrapper.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .list-wrapper {
+    width: 1024px;
+    margin: 0 auto;
+
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    @include media("<wide") {
+      width: 768px;
+    }
+    @include media("<large") {
+      width: 512px;
+    }
+    @include media("<medium") {
+      width: 100%;
+    }
+  }
+
+● 이 컴포넌트를 ListPage에 렌더링하세요.
+  [src/pages/ListPage.js]
+  ...
+  import ListWrapper from 'components/list/ListWrapper';
+
+  const ListPage = () => {
+    return (
+      <div>
+        <PageTemplate>
+          <ListWrapper>
+            List
+          </ListWrapper>
+        </PageTemplate>
+      </div>
+    );
+  };
+  ...
+
+● 웹 브라우저를 열어 ListWrapper 컴포넌트가 잘 나타나는지 확인
