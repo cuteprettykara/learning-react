@@ -40,4 +40,3 @@
   export { default as NotFoundPage } from './NotFoundPage';
 
 ● 이 컴포넌트들을 불러와 App 컴포넌트에서 라우트를 적용하세요.
-  

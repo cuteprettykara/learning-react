@@ -1,0 +1,78 @@
+● Footer 컴포넌트 생성
+  블로그 프로젝트 초반인 지금은 별도의 인증작업 없이도 포스트 작성/수정/삭제가 가능하지만,
+  후반에는 간단히 비밀번호 인증을 구현합니다.
+
+  Footer 컴포넌트는 단순히 로고 이외에도
+    * 로그인되지 않았을 때는 [관리자 로그인]버튼을 표시하고,
+    * 로그인 중일 때는 [로그 아웃]버튼을 표시합니다.
+
+  [src/components/common/Header/Header.js]
+  import React from 'react';
+  import styles from './Footer.scss';
+  import classNames from 'classnames/bind';
+  import { Link } from 'react-router-dom';
+
+  const cx = classNames.bind(styles);
+
+  const Footer = () => {
+    return (
+      <footer className={cx('footer')}>
+        <Link to="/" className={cx('brand')}>reactblog</Link>
+        <div className={cx('admin-login')}>관리자 로그인</div>
+      </footer>
+    );
+  };
+
+  export default Footer;
+
+● Footer.scss 파일 생성
+  [src/components/common/Footer/Footer.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .footer {
+    background: $oc-gray-7;
+    height: 10rem;
+
+    // 내부 내용 중앙 정렬
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; // 위에서 아래로
+
+    .brand {
+      // 로고
+      color: white;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .admin-login {
+      // 로그인 버튼
+      margin-top: 0.5rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.8);
+      cursor: pointer; // 손가락 모양 커서
+      &:hover { // 마우스 호버 시 불투명도 없애기
+        color: white;
+      }
+    }
+  }
+
+● 이 컴포넌트를 PageTemplate에서 렌더링합니다.
+  [src/components/common/PageTemplate/PageTemplate.js]
+  ...
+  import Footer from 'components/common/Footer';
+  ...
+  const PageTemplate = () => {
+    return (
+      <div className={cx('page-template')}>
+        <Header />
+        <Footer />
+      </div>
+    );
+  };
+  ...
+
+● 웹 브라우저를 열어 Footer 컴포넌트가 잘 나타나는지 확인

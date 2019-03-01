@@ -1,0 +1,82 @@
+● 우선 프로젝트의 폰트 및 전역적으로 사용하는 스타일을 지정해 주겠습니다.
+  styles 디렉토리에 base.scss 파일을 만드세요.
+  [src/styles/base.scss]
+  /* body, 타이포그래피 등의 기본 스타일 설정 */
+  @import url("//fonts.googleapis.com/earlyaccess/notosanskr.css");
+  @import url("//cdn.jsdelivr.net/gh/velopert/font-d2coding@1.2.1/d2coding.css");
+
+  body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans KR", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  // box-sizing 일괄 설정
+  * {
+    box-sizing: inherit;
+  }
+
+  // 링크 스타일 밑줄 및 색상 무효화
+  a {
+    text-decoration: inherit;
+    color: inherit;
+  }
+
+● src/index.js에서 이 스타일을 불러와 적용하세요.
+  [src/index.js]
+  ...
+  import 'styles/base.scss';
+  ...
+
+● 이제 컴포넌트를 스타일링할 때 사용할 스타일 유틸을 설정하겠습니다. 우리가 적용할 것은
+  * 색상을 쉽게 선택할 수 있는 open-color,
+  * 반응형 디자인을 쉽게 적용할 수 있는 include-media
+  * 그림자를 간편하게 설정할 수 있는 material-shadow 믹스인입니다.
+
+  open-color와 include-media는 yarn으로 설치할 수 있습니다.
+  $ yarn add open-color include-media
+
+  설치를 하고 styles/lib/_all.scss 파일을 만들어 다음과 같이 스타일 파일들을 불러오세요.
+  [src/styles/lib/_all.scss]
+  @import '~open-color/open-color';
+  @import '~include-media/dist/include-media';
+
+  다음으로 그림자를 쉽게 설정할 수 있는 material-shadow 믹스인을 styles/lib/_mixin.scss파일에 작성합니다.
+  [src/styles/lib/_mixin.scss]
+  @mixin material-shadow($z-depth: 1, $strength: 1, $color: black) {
+    @if $z-depth == 1 {
+      box-shadow: 0 1px 3px rgba($color, $strength * 0.14), 0 1px 2px rgba($color, $strength * 0.24);
+    }
+    @if $z-depth == 2 {
+      box-shadow: 0 3px 6px rgba($color, $strength * 0.16), 0 3px 6px rgba($color, $strength * 0.23);
+    }
+    @if $z-depth == 3 {
+      box-shadow: 0 10px 20px rgba($color, $strength * 0.19), 0 6px 6px rgba($color, $strength * 0.23);
+    }
+    @if $z-depth == 4 {
+      box-shadow: 0 15px 30px rgba($color, $strength * 0.25), 0 10px 10px rgba($color, $strength * 0.22);    
+    }
+    @if $z-depth == 5{
+      box-shadow: 0 20px 40px rgba($color, $strength * 0.30), 0 15px 12px rgba($color, $strength * 0.22);   
+    }
+    @if ($z-depth < 1) or ($z-depth > 5) {
+      @warn "$z-depth must be between 1 and 5";
+    }
+  }
+
+  믹스인을 작성한 후에는 이 파일을 styles/lib/_all.scss에서 불러오세요.
+  [src/styles/lib/_all.scss]
+  @import '~open-color/open-color';
+  @import '~include-media/dist/include-media';
+  @import 'mixin';
+
+  마지막으로 styles/utils.scss 파일을 만들어 방금 작성한 것들을 불러오세요.
+  추가로 반응형 디자인을 할 때 참조할 구간을 변수로 저장해 두겠습니다.
+  [src/styles/utils.scss]
+  @import 'lib/all';
+  $breakpoints: (small: 320px, medium: 768px, large: 1024px, wide: 1400px);
+
+  앞으로 컴포넌트 스타일을 작성할 때 유틸에 적용한 코드를 사용하려면 다음 코드를 삽입합니다.
+  @import 'utils';

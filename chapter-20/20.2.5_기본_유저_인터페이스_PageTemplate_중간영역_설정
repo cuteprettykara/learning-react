@@ -1,0 +1,32 @@
+PageTemplate에서 Header와 Footer사이, 즉 중간 영역의 배경색을 회색으로 지정하고,
+Footer가 언제나 페이지 아래쪽에 위치하도록 중간 영역의 최소 높이를 설정하겠습니다.
+
+Header와 Footer를 합치면 15rem이므로, 페이지 높이에서 15rem을 뺀 값을 min-height로 지정합니다.
+그리고 그 중간 영역에는 컴포넌트의 children이 보이도록 설정하세요.
+
+  [src/components/common/PageTemplate/PageTemplate.js]
+  ...
+  const PageTemplate = ({children}) => {
+    return (
+      <div className={cx('page-template')}>
+        <Header />
+        <main>
+          {children}
+        </main>
+        <Footer />
+      </div>
+    );
+  };
+  ...
+
+  [src/components/common/PageTemplate/PageTemplate.scss]
+  @import 'styles/utils.scss';
+
+  .page-template {
+    main {
+      background: $oc-gray-1;
+      min-height: calc(100vh - 15rem);
+    }
+  }
+
+  ● 웹 브라우저를 열어 회색 배경을 가진 중간 영역이 잘 나타나는지 확인

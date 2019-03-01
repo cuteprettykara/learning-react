@@ -1,0 +1,138 @@
+● Button 컴포넌트 생성
+  * to Props가 있을 때는 Link 컴포넌트를 사용
+  * to Props가 없을 때는 div 태그를 사용합니다.
+  * them Props를 받아서 이에 따른 스타일을 설정하면 Button 컴포넌트의 스타일을 여러 종률로 만들 수 있습니다.
+
+  [src/components/common/Button/Buton.js]
+  import React from 'react';
+  import styles from './Button.scss';
+  import classNames from 'classnames/bind';
+  import { Link } from 'react-router-dom';
+
+  const cx = classNames.bind(styles);
+
+  // 전달 받은 className, onClick 등의 값들이 rest 안에 들어 있습니다.
+  // JSX에서 ...을 사용하면 내부에 있는 값들을 props로 넣어줍니다.
+  const Div = ({children, ...rest}) => <div {...rest}>{children}</div>;
+
+  const Button = ({ children, to, onClick, disabled, theme = 'default' }) => {
+    // to 값이 존재하면 Link를 사용하고, 그렇지 않으면 div를 사용합니다.
+    // 비활성화되어 있는 버튼인 경우에도 div가 사용됩니다.
+    const Element = (to && !disabled) ? Link : Div;
+
+    // 비활성화되면 onClick은 실행되지 않습니다
+    // disabled 값이 true가 되면 className에 disabled가 추가됩니다.
+    return (
+      <Element
+        to={to}
+        className={cx('button', theme, {disabled})}
+        onClick={disabled ? () => null : onClick}
+      >
+        {children}
+      </Element>
+    );
+  };
+
+  export default Button;
+
+● Button.scss 생성
+  버튼 테마는 default, outline, gray 총 세 가지입니다.
+  theme값은 따로 명시하지 않으며 default로 설정됩니다.
+  버튼은 비활성화되기도 하는데, disabled 클래스를 적용합니다.
+
+  [src/components/common/Button/Buton.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .button {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: white;
+    cursor: pointer;
+    user-select: none; // 드래그 방지
+    display: inline-flex;
+
+    // default: 파란색 버튼
+    &.default {
+      background: $oc-blue-6;
+      &:hover {
+        background: $oc-blue-5;
+      }
+      &:active {
+        background: $oc-blue-6;
+      }
+    }
+
+    // gray: 회색 버튼
+    &.gray {
+      background: $oc-gray-7;
+      &:hover {
+        background: $oc-gray-6;
+      }
+      &:active {
+        background: $oc-gray-7;
+      }
+    }
+
+    // outline: 흰색 테두리 버튼
+    &.outline {
+      border: 2px solid white;
+      border-radius: 2px;
+      &:hover {
+        background: white;
+        color: $oc-blue-6;
+      }
+      &:active {
+        background: rgba(255,255,255, 0.85);
+        border: 2px solid rgba(255,255,255, 0.85);
+      }
+    }
+
+    &:hover {
+      @include material-shadow(2, 0.5); // 마우스 커서가 위에 있으면 그림자 생성
+    }
+
+    // 비활성화된 버튼
+    &.disabled {
+      background: $oc-gray-4;
+      color: $oc-gray-6;
+      cursor: default;
+      &:hover, &:active {
+        box-shadow: none;
+        background: $oc-gray-4;
+      }
+    }
+
+    // 버튼 두 개 이상이 함께 있다면 중간 여백
+    & + & {
+      margin-left: 0.5rem;
+    }
+  }
+
+● 이 컴포넌트를 Header 컴포넌트의 오른쪽 부분에 렌더링합니다.
+  버튼 테마는 outline으로 설정하세요.
+  [src/components/common/Header/Header.js]
+  ...
+  import Button from 'components/common/Button';
+  ...
+  const Header = () => {
+    return (
+      <header className={cx('header')}>
+        <div className={cx('header-content')}>
+         ...
+          <div className={cx('right')}>
+            <Button theme="outline" to="/editor">새 포스트</Button>
+          </div>
+        </div>
+      </header>
+    );
+  };
+
+  export default Header;
+
+
+● 웹 브라우저를 열어 Button 컴포넌트가 잘 나타나는지 확인

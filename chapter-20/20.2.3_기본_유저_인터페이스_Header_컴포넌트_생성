@@ -1,0 +1,106 @@
+● Header 컴포넌트 생성
+  Header 컴포넌트는 왼쪽에 로고가 있고, 오른쪽에 버튼이 있습니다.
+    * 포스트 목록: 오른쪽에 [새 포스트] 버튼
+    * 포스트: 추가로 [수정]과 [삭제] 버튼이 있습니다.
+
+  [src/components/common/Header/Header.js]
+  import React from 'react';
+  import styles from './Header.scss';
+  import classNames from 'classnames/bind';
+  import { Link } from 'react-router-dom';
+
+  const cx = classNames.bind(styles);
+
+  const Header = () => {
+    return (
+      <header className={cx('header')}>
+        <div className={cx('header-content')}>
+          <div className={cx('brand')}>
+            <Link to="/">reactblog</Link>
+          </div>
+          <div className={cx('right')}>
+            {/* 조건에 따라 렌더링 */}
+            오른쪽
+          </div>
+        </div>
+      </header>
+    );
+  };
+
+  export default Header;
+
+● Header.scss 파일 생성
+  [src/components/common/Header/Header.scss]
+  @import 'styles/utils.scss';
+  // @import 'utils';
+
+  .header {
+    background: $oc-blue-6;
+    .header-content {
+      height: 5rem;
+      width: 1400px;
+      margin: 0 auto; // 중앙 정렬
+      padding-left: 3rem;
+      padding-right: 3rem;
+
+      // 내부 아이템 세로 중앙 정렬
+      display: flex;
+      align-items: center;
+
+      // 반응형 레이아웃
+      @include media("<wide") {
+        width: 100%;
+      }
+      @include media("<medium") {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .brand {
+        // 로고
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .right {
+        // 우측 내용
+        margin-left: auto;
+      }
+    }
+  }
+
+  ※ 지금처럼 CSS Module을 사용하여 새로운 className을 만든다면 스타일 코드를 작성한 후 웹 브라우저에서
+     새로고침을 해야 반영됩니다. 원래 CSS를 변경할 때는 웹 브라우저에서 새로고침하지 않아도 되는데, 새로운
+     className을 만들 때는 이 기능이 제대로 적용되지 않습니다.
+
+● 이 컴포넌트를 PageTemplate에서 렌더링하고, ListPage에서 PageTemplate을 렌더링
+  [src/components/common/PageTemplate/PageTemplate.js]
+  ...
+  import Header from 'components/common/Header';
+  ...
+  const PageTemplate = () => {
+    return (
+      <div className={cx('page-template')}>
+        <Header />
+      </div>
+    );
+  };
+  ...
+
+  [src/pages/ListPage.js]
+  ...
+  import PageTemplate from 'components/common/PageTemplate';
+
+  const ListPage = () => {
+    return (
+      <div>
+        <PageTemplate>
+          List
+        </PageTemplate>
+      </div>
+    );
+  };
+  ...
+
+● 웹 브라우저를 열어 Header 컴포넌트가 잘 나타나는지 확인
