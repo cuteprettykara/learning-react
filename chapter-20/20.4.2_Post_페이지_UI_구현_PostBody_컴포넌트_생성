@@ -1,0 +1,63 @@
+● PostBody 컴포넌트 생성
+  [src/components/post/PostBody/PostBody.js]
+  import React from 'react';
+  import styles from './PostBody.scss';
+  import classNames from 'classnames/bind';
+
+  const cx = classNames.bind(styles);
+
+  const PostBody = () => {
+    return (
+      <div className={cx('post-body')}>
+        <div className={cx('paper')}>
+          내용
+        </div>
+      </div>
+    );
+  };
+
+  export default PostBody;
+
+● PostBody.scss
+  [src/components/post/PostBody/PostBody.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .post-body {
+    .paper {
+      padding: 2rem;
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
+      background: white;
+      @include material-shadow(4, 0.5);
+      // 위로 3rem 이동시켜 주어 파란색 배경을 침범하게 합니다.
+      transform: translateY(-3rem);
+      margin: 0 auto;
+      min-height: 20rem;
+
+      // 해상도에 따라 다른 width를 설정합니다.
+      width: 1024px;
+      @include media("<large") { width: 768px; }
+      @include media("<medium") { width: calc(100% - 2rem); }
+    }
+  }
+
+● 이 컴포넌트를 PostPage에서 렌더링
+  [src/pages/PostPage.js]
+  ...
+  import PostBody from 'components/post/PostBody';
+
+  const PostPage = () => {
+    return (
+      <div>
+        <PageTemplate>
+          <PostInfo />
+          <PostBody />
+        </PageTemplate>
+      </div>
+    );
+  };
+  ...
+
+  ● 웹 브라우저를 열어 컴포넌트가 잘 나타나는지 확인
+    http://localhost:3000/post/1
