@@ -1,0 +1,49 @@
+● Prismjs를 사용하여 코드 블록을 아름답게 꾸며 줍시다.
+  Prismjs 관련 코드를 불러온 후, Prism.highlightAll() 함수를 호출하면 화면에 있는 코드 블록에 스타일을 입힙니다.
+
+  이 함수는 마크다운이 변환되어 html을 렌더링한 후 반영해야 합니다.
+  따라서 componentDidUpdate에서 state값이 바뀔 때 이 코드를 호출해 주세요.
+
+  [src/components/common/MarkdownRender/MarkdownRender.js]
+  ...
+  // prism 관련 코드 불러오기
+  import Prism from 'prismjs';
+  import 'prismjs/themes/prism-okaidia.css';
+  // 지원할 코드 형식들을 불러옵니다.
+  // http://prismjs.com/#languages-list 참조
+  import 'prismjs/components/prism-bash.min.js'
+  import 'prismjs/components/prism-javascript.min.js'
+  import 'prismjs/components/prism-jsx.min.js'
+  import 'prismjs/components/prism-css.min.js'
+
+  const cx = classNames.bind(styles);
+
+  class MarkdownRender extends Component {
+    ...
+    componentDidUpdate(prevProps, prevState) {
+      // markdown 값이 변경되면 renderMarkdown을 호출합니다.
+      ...
+
+      // state가 바뀌면 코드 하이라이팅
+      if (prevState.html !== this.state.html) {
+        Prism.highlightAll();
+      }
+    }
+    ...
+  }
+  ...
+
+● 자, 다시 에디터에 코드를 입력하세요.
+  ```javascript
+  console.error('error');
+  ```
+
+  ```css
+  .class {
+    color: #ffffff;
+  }
+  ```
+  ```bash
+  $ ps -ef | grep node
+  ```
+● 지원하고 싶은 언어가 있다면 http://prismjs.com/#languages-list를 참고하여 더 불러오면 됩니다.
