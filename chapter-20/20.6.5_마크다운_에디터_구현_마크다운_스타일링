@@ -1,0 +1,105 @@
+● 현재 마크다운은 html의 기본 스타일로 설정되어 있습니다.
+  포스트가 조금 더 멋져 보이도록 스타일을 조금 변경하겠습니다.
+
+  [src/components/common/MarkdownRender/MarkdownRender.scss]
+  ...
+  .markdown-render {
+    blockquote {
+      border-left: 4px solid $oc-blue-6;
+      padding: 1rem;
+      background: $oc-gray-1;
+      margin-left: 0;
+      margin-right: 0;
+      p {
+        margin: 0;
+      }
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 500;
+    }
+
+    // 텍스트 사이의 코드
+    h1, h2, h3, h4, h5, p {
+      code {
+        font-family: 'D2 Coding';
+        background: $oc-gray-0;
+        padding: 0.25rem;
+        color: $oc-blue-6;
+        border: 1px solid $oc-gray-2;
+        border-radius: 2px;
+      }
+    }
+
+    // 코드 블록
+    code[class*="language-"], pre[class*="language-"] {
+      font-family: 'D2 Coding';
+    }
+
+    a {
+      color: $oc-blue-6;
+      &:hover {
+        color: $oc-blue-5;
+        text-decoration: underline;
+      }
+    }
+
+    // 표 스타일
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    table, th, td {
+      border: 1px solid $oc-gray-4;
+    }
+
+    th, td {
+      font-size: 0.9rem;
+      padding: 0.25rem;
+      text-align: left;
+    }
+
+    // 이미지 최대 사이즈 설정 및 중앙 정렬
+    img {
+      max-width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+
+● 스타일을 저장한 후 마크다운 부분에 다음과 같이 입력해 보세요.
+  # h1
+  ## h2
+  ### h3
+  #### h4
+  ##### h5
+  > blockquote
+
+  ```javascript
+  console.log('코드');
+  ```
+
+  텍스트 사이의 `코드`
+
+  [링크](https://google.com)
+
+  ## 이미지
+  ![](https://via.placeholder.com/350x150)
+
+● 정리
+  검색하면 우리가 사용한 CodeMirror와 Prismjs를 [컴포넌트 형태로] 포팅한 프로젝트도 찾을 수 있습니다.
+  리액트 형태로 만든 라이브러리를 사용하는 것이 편할 수도 있지만,
+  세부적으로 설정하거나 컴포넌트를 커스터마이징하는 작업은 매우 복잡해질 수 있습니다.
+
+  더 나아가 리액트 컴포넌트로 만든 프로젝트의 유지보수가 중단될 수도 있습니다.
+
+  특정 자바스크립트 라이브러리가 리액트 컴포넌트화된 라이브러리를 사용할 때가 있다면,
+  해당 라이브러리를 공식적으로 만들었는지 한번 확인해 보세요.
+
+  추가로 프로젝트의 마지막 수정 날짜는 언제고, 유지 보수는 잘하는지도 확인하세요.
+
+  공식적으로 만든 리액트 라이브러리가 아니라면 대부분은 원본 라이브러리를 설치하여 사용하면 편합니다.
+
+  아직까지는 앞서 만든 백엔드 서버와 연동하지 않았습니다.
+  이제 서버에 API요청을 하여 필요한 데이터를 등록하고, 등록한 데이터들을 조회하는 방법을 알아보겠습니다.
