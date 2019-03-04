@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './EditorPane.scss';
-import classNames from 'classnames';
+import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
