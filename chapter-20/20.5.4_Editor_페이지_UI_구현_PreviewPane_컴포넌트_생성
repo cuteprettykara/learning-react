@@ -1,0 +1,81 @@
+● PreviewPane 컴포넌트 생성
+  이 컴포넌트는 title과 markdown을 props로 받아와 보여 줍니다.
+  받아 온 값은 나중에 렌더링하고, 지금은 텍스트를 렌더링하겠습니다.
+
+  [src/components/editor/EditorHeader/PreviewPane.js]
+  import React from 'react';
+  import styles from './PreviewPane.scss';
+  import classNames from 'classnames';
+
+  const cx = classNames.bind(styles);
+
+  const PreviewPane = ({markdown, title}) => {
+    return (
+      <div className={cx('preview-pane')}>
+        <h1 className={cx('title')}>
+          제목
+        </h1>
+        <h1>
+          내용
+        </h1>
+      </div>
+    );
+  };
+
+  export default PreviewPane;
+
+● PreviewPane.scss
+  [src/components/editor/EditorHeader/PreviewPane.scss]
+  // @import 'utils';
+  @import 'styles/utils.scss';
+
+  .preview-pane {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto; // 사이즈 초과 시 스크롤바 나타나게 설정
+    font-size: 1.125rem;
+    .title {
+      font-size: 2.5rem;
+      font-weight: 300;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid $oc-gray-4;
+    }
+  }
+
+● 이 컴포넌트를 EidtorPage에서 렌더링
+  [src/pages/EditorPage.js]
+  ...
+  import PreviewPane from 'components/editor/PreviewPane';
+
+  const EditorPage = () => {
+    return (
+      <div>
+        <EditorTemplate
+          ...
+          preview={<PreviewPane/>}
+        />
+      </div>
+    );
+  };
+  ...
+
+● 현재 상태에서 웹 브라우저의 가로 길이가 짧을 때는 조금 이상하게 나타납니다.
+  이렇게 화면을 나누면 모바일에서는 사용하기가 힘들겠죠?
+  모바일에서는 오른쪽 미리보기 부분을 숨깁시다. EditorTemplate의 스타일을 다음과 같이 수정하세요.
+  display: none; 속성을 사용해서 preview와  separator 속성을 숨겨 주었습니다.
+
+  [src/components/edito/EditorTemplate/EditorTemplate.scss]
+  ...
+  .editor-template {
+    .panes {
+      ...
+      @include media("<medium") {
+        .editor {
+          flex: 1!important;
+        }
+        .preview, .separator {
+          display: none;
+        }
+      }
+    }
+  }
