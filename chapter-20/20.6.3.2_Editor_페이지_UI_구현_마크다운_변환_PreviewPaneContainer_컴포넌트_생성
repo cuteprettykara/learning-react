@@ -1,0 +1,41 @@
+title값과 markdown값을 스토어에서 받아와 PreviewPane에 넣어 줍시다.
+
+● PreviewPaneContainer 컴포넌트 생성
+[src/containers/editor/PreviewPaneContainer.js]
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PreviewPane from 'components/editor/EditorPane';
+
+class PreviewPaneContainer extends Component {
+  render() {
+    const { title, markdown } = this.props;
+    return (
+      <PreviewPane title={title} markdown={markdown} />
+    );
+  }
+}
+
+export default connect(
+  state => ({
+    title: state.editor.get('title'),
+    markdown: state.editor.get('markdown')
+  })
+)(PreviewPaneContainer);
+
+● EditorPage에서 PreviewPane을 PreviewPaneContainer로 교체하세요.
+  [src/pages/EditorPage.js]
+  ...
+  import PreviewPaneContainer from 'containers/editor/PreviewPaneContainer';
+
+  const EditorPage = () => {
+    return (
+      <div>
+        <EditorTemplate
+          header={...}
+          editor={...}
+          preview={<PreviewPaneContainer/>}
+        />
+      </div>
+    );
+  };
+  ...
