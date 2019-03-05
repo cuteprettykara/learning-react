@@ -1,0 +1,159 @@
+현재 백엔드 서버는 포트 4000번으로 열려 있으며, 개발 서버는 포트 3000번으로 열려 있습니다.
+따라서 API를 요청하려면 http://localhost:4000/api/posts 형식으로 직접 요청을 해야 하는데,
+이는 잘못된 방식입니다. 나중에 이 프로젝트를 배포하면 호스트가 변경될 것이기 때문입니다.
+
+● 프록시 설정
+  webpack의 프록시(proxy) 기능을 사용하면, 개발 서버로 들어온 요청을 백엔드 서버에 전달하고,
+  응답을 그대로 반환할 수 있습니다.
+
+  create-react-app으로 만든 프로젝트라면 package.json에 명시하면 됩니다.
+  마지막 부분에 다음과 같이 코드를 입력해 주세요.
+  [package.json]
+  {
+    ...
+    "proxy": "http://localhost:4000"
+  }
+
+  프록시를 설정한 후에는 개발 서버를 다시 시작해야 적용됩니다.
+
+● axios 설치
+  REST API 웹 요청을 프로미스 기반으로 간편하게 할 수 있는 axios 라이브러리를 설치하세요.
+  $ yarn add axios
+
+● 글 작성 API 함수 생성
+  [src/lib/api.json]
+  import axios from "axios";
+
+  export const writePost = ({title, body, tags}) => axios.post('/api/posts', {title, body, tags});
+
+● editor 모듈에  WRITE_POST 액션 생성
+  [src/store/modules/editor.js]
+  ...
+  import * as api from 'lib/api';
+  import { pender } from 'redux-pender';
+
+  // action types
+  ...
+  const WRITE_POST = 'editor/WRITE_POST';
+
+  // action creators
+  ...
+  export const writePost = createAction(WRITE_POST, api.writePost);
+
+  // initial state
+  const initialState = Map({
+    ...
+    postId: null
+  });
+
+  // reducer
+  export default handleActions({
+    ...,
+    ...pender({
+      type: WRITE_POST,
+      onSuccess: (state, action) => {
+        const { _id } = action.payload.data;
+        return state.set('postId', _id);
+      }
+    })
+  }, initialState);
+
+● EditorHeaderContainer 컴포넌트 생성
+  왼쪽 [뒤로가기] 버튼을 눌렀을 때는 리액트 라우터에서 뒤로가기를 하는 history객체의 goBack 함수를 호출하겠습니다.
+  이 과정에서 withRouter를 불러와 컴포넌트를 내보낼 때 감싸 줍니다. 해당 컴포넌트에서 리액트 라우터가 전달해주는
+  props값을 받아 오기 위해서입니다.
+
+  오른쪽 [작성하기] 버튼을 눌렀을 때는 글쓰기 액션을 발생시킨 후, postId값을 받아 와 포스트 주소로 이동합니다.
+
+  그리고 componentDidMount가 발생할 때 INITIALIZE 액션을 실행시켜 에디터 상태를 초기화하세요.
+  초기화하지 않으면 이전에 작성한 상태가 남아 있습니다.
+
+  [src/containers/editor/EditorHeaderContainer.js]
+  import React, { Component } from 'react';
+  import EditorHeader from 'components/editor/EditorHeader';
+  import { connect } from 'react-redux';
+  import { bindActionCreators } from 'redux';
+  import { withRouter } from 'react-router-dom';
+
+  import * as editorActions from 'store/modules/editor';
+
+  class EditorHeaderContainer extends Component {
+
+    componentDidMount() {
+      const { EditorActions } = this.props;
+      EditorActions.initialize(); // 에디터를 초기화합니다.
+    }
+
+    handleGoBack = () => {
+      const { history } = this.props;
+      history.goBack();
+    }
+
+    handleSubmit = async () => {
+      const { title, markdown, tags, EditorActions, history } = this.props;
+      const post = {
+        title,
+        body: markdown,
+        // 태그 텍스트를 ,로 분리시키고 앞뒤 공백을 지운 후 중복되는 값을 제거해줍니다.
+        tags: tags === "" ? [] : [...new Set(tags.split(',').map(tag => tag.trim()))]
+      };
+
+      try {
+          await EditorActions.writePost(post);
+          // 페이지를 이동시킵니다. 주의: postId는 상단에서 레퍼런스를 만들지 말고
+          // 이 자리에서 this.props.postId를 조회해 주어야 합니다(현재 값을 불러오기 위함).
+          history.push(`/post/${this.props.postId}`)
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    render() {
+      const { handleGoBack, handleSubmit } = this;
+
+      return (
+        <EditorHeader
+          onGoBack={handleGoBack}
+          onSubmit={handleSubmit}
+        />
+      );
+    }
+  }
+
+  export default connect(
+    state => ({
+      title: state.editor.get('title'),
+      markdown: state.editor.get('markdown'),
+      tags: state.editor.get('tags'),
+      postId: state.editor.get('postId')
+    }),
+    dispatch => ({
+      EditorActions: bindActionCreators(editorActions, dispatch)
+    })
+  )(withRouter(EditorHeaderContainer));
+
+● EditorPage를 열어 기존 EditorHeader를 EditorHeaderContainer로 바꾸세요.
+  [src/pages/EditorPage.js]
+  ...
+  import EditorHeaderContainer from 'containers/editor/EditorHeaderContainer';
+  ...
+
+  const EditorPage = () => {
+    return (
+      <div>
+        <EditorTemplate
+          header={<EditorHeaderContainer/>}
+          editor={<EditorPaneContainer/>}
+          preview={<PreviewPaneContainer/>}
+        />
+      </div>
+    );
+  };
+  ...
+
+● 테스트
+  * 에디터 페이지를 열어 [뒤로가기] 버튼을 눌러 보세요.
+  * 다시 에디터 페이지를 열어 제목, 내용, 태그를 입력하고 [작성하기] 버튼을 눌러 보세요.
+    포스트 페이지로 페이지가 전환될 것입니다. 하지만 아직 포스트를 읽는 API가 구현되지 않았기 때문에
+    화면에는 기본 값만 나타납니다.
+    이제 포스트를 보여 주는 기능을 구현해 봅시다.
