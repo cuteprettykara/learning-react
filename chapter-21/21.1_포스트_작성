@@ -21,7 +21,7 @@
   $ yarn add axios
 
 ● 글 작성 API 함수 생성
-  [src/lib/api.json]
+  [src/lib/api.js]
   import axios from "axios";
 
   export const writePost = ({title, body, tags}) => axios.post('/api/posts', {title, body, tags});

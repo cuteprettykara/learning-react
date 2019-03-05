@@ -1,0 +1,171 @@
+포스트를 읽는 기능을 구현하는 것은 매우 간단합니다.
+이전에 만든 /api/posts/:id API를 호출하여 데이터를 받아온 후, post모듈이 지닌 상태에 넣어 주면 됩니다.
+
+● 포스트 읽기 API 함수 생성
+  [src/lib/api.js]
+  ...
+  export const getPost = (id) => axios.get(`/api/posts/${id}`);
+
+● post 모듈 생성
+  [src/store/modules/post.js]
+  ...
+  import { Map, fromJS } from "immutable";
+  import * as api from 'lib/api';
+  import { pender } from 'redux-pender';
+
+  // action types
+  const GET_POST = 'post/GET_POST';
+
+  // action creators
+  export const getPost = createAction(GET_POST, api.getPost);
+
+  // initial state
+  const initialState = Map({
+    post: Map({})
+  });
+
+  // reducer
+  export default handleActions({
+    ...pender({
+      type: GET_POST,
+      onSuccess: (state, action) => {
+        const { data: post } = action.payload;
+        return state.set('post', fromJS(post));
+      }
+    })
+  }, initialState);
+
+● Post 컨테이너 컴포넌트 생성
+  렌더링하는 부분에서는 로딩 중일때 아무것도 나타나지 않도록 null을 반환해 주었습니다.
+  import React, { Component } from 'react';
+  import PostInfo from 'components/post/PostInfo';
+  import PostBody from 'components/post/PostBody';
+  import * as postActions from 'store/modules/post';
+  import { connect } from 'react-redux';
+  import { bindActionCreators } from "redux";
+
+  class Post extends Component {
+
+    initialize = async () => {
+      const { PostActions, id } = this.props;
+
+      try {
+        await PostActions.getPost(id);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    componentDidMount() {
+      this.initialize();
+    }
+
+    render() {
+      const { loading, post } = this.props;
+
+      if (loading) return null; // 로딩 중일 때는 아무것도 보여 주지 않음
+
+      const { title, body, publishedDate, tags } = post.toJS();
+
+      return (
+        <div>
+          <PostInfo title={title} publishedDate={publishedDate} tags={tags} />
+          <PostBody body={body} />
+        </div>
+      );
+    }
+  }
+
+  export default Post;
+
+● 이 컴포넌트를 PostPage에서 렌더링합시다.
+  [src/pages/PostPage.js]
+  ...
+  import Post from 'containers/post/Post';
+
+  const PostPage = ({match}) => {
+    const { id } = match.params;
+    return (
+      <div>
+        <PageTemplate>
+          <Post id={id} />
+        </PageTemplate>
+      </div>
+    );
+  };
+  ...
+
+● PostInfo에서 올바른 데이터 보여 주기
+  현재 PostInfo와 PostBody 컴포넌트에서는 props로 받은 값이 아니라, 우리가 사전에 설정한 텍스트가 보입니다.
+  텍스트가 들어가는 부분에 우리가 props로 넣어 준 값들을 렌더링해 보겠습니다.
+  우선 PostInfo부터 작업해 봅시다.
+
+  날짜를 텍스트 형태로 보여 주는 부분에서는 편의상 moment 라이브러리를 설치하여 사용하겠습니다.
+  이 라이브러리는 날짜를 다양한 형식의 텍스트로 변환해 줍니다(https://momentjs.com/).
+
+  $ yarn add moment
+
+  [src/components/post/PostInfo/PostInfo.js]
+  ...
+  import { Link } from 'react-router-dom';
+  import moment from 'moment';
+  ...
+
+  const PostInfo = ({title, publishedDate, tags}) => {
+    return (
+      <div className={cx('post-info')}>
+        <div className={cx('info')}>
+          <h1>{title}</h1>
+          <div className={cx('tags')}>
+            {
+              // tags가 존재할 때만 map을 실행합니다.
+              tags && tags.map(tag =>
+                <Link key={tag} to={`/tag/${tag}`}>#{tag}</Link>
+              )
+            }
+          </div>
+          <div className={cx('date')}>{moment(publishedDate).format('ll')}</div>
+        </div>
+      </div>
+    );
+  };
+  ...
+
+● PostBody에서 올바른 데이터 보여 주기
+  이부분은 매우 간단합니다.
+  우리가 이전에 만들어 놓았던 MarkdownRender 컴포넌트를 불러와 Post 컴포넌트가 전달한 body값을 주입하면 됩니다.
+
+  [src/components/post/PostBody/PostBody.js]
+  ...
+  import MarkdownRender from 'components/common/MarkdownRender';
+
+  const cx = classNames.bind(styles);
+
+  const PostBody = ({body}) => {
+    return (
+      <div className={cx('post-body')}>
+        <div className={cx('paper')}>
+          <MarkdownRender markdown={body} />
+        </div>
+      </div>
+    );
+  };
+  ...
+
+● 테스트
+  에디터에서 새 글을 작성해 보세요. 마크다운이 제대로 렌더링되었나요?
+  우리가 작성한 마크다운이 잘 렌더링되었지만, 아직 코드 부분에 색상을 입히지 않았습니다.
+  Prism.highlightAll()이 우리가 만든 MarkdownRender 컴포넌트의 componentDidUpdate에서만 실행되기 때문입니다.
+
+  에디터에서 마크다운이 변경될 때는 하이라이팅을 제대로 호출하지만,
+  지금처럼 처음부터 마크다운 값이 있을 때는 [componentWillMount 부분에서] 마트다운 변환작업이 일어나
+  html 상태가 바뀌어도 componentDidUpdate를 호출하지 않습니다.
+
+  따라서 componentDidMount에서도 Prism.highlightAll()을 호출하면 이 문제가 해결됩니다.
+  MarkdownRender 컴포넌트를 열어 componentDidMount를 다음과 같이 작성하세요.
+  [src/components/common/MarkdownRender/MarkdownRender.js]
+  ...
+  componentDidMount() {
+    Prism.highlightAll();
+  }
+  ...

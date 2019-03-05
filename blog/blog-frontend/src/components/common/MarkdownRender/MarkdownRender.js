@@ -58,6 +58,10 @@ class MarkdownRender extends Component {
     }
   }
 
+  componentDidMount() {
+    Prism.highlightAll();
+  }
+
   render() {
     const { html } = this.state;
      // React 에서 html 을 렌더링 하려면 객체를 만들어서 내부에
