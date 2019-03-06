@@ -1,0 +1,36 @@
+페이지네이션이 실제로 작동하도록 기능을 구현해 줍시다.
+이 부분은 딱히 함수를 실행하지 않고, 전달받은 page값, lastPage값, tag값을 사용해서
+이전 또는 다음 페이지 링크로 이동시켜 주겠습니다.
+만들어둔 Button 컴포넌트에 Link 기능도 있기 때문에 to값을 설정하면 됩니다.
+
+그리고 첫 번째 페이지에서는 [이전] 버튼을 비활성화하고, 마지막 페이지에서는 [다음] 버튼을 비활성화하세요.
+
+태그를 선택했을 때는 /tag 라우트를 사용하고, 태그를 선택하지 않았을 때는 /page 라우트를 사용합니다.
+주소 생성 작업을 용이하게 진행하려고 함수를 따로 작성하겠습니다.
+
+[src/components/list/Pagenation/Pagination.js]
+...
+
+const Pagination = ({page, lastPage, tag}) => {
+  const createPagePath = (page) => {
+    return tag ? `/tag/${tag}/${page}` : `/page/${page}`;
+  }
+
+  return (
+    <div className={cx('pagination')}>
+      <Button disabled={page === 1} to={createPagePath(page - 1)}>
+        이전 페이지
+      </Button>
+      <div className={cx('number')}>
+        페이지 {page}
+      </div>
+      <Button disabled={page === lastPage} to={createPagePath(page + 1)}>
+        다음 페이지
+      </Button>
+    </div>
+  );
+};
+...
+
+웹 사이트를 열어서 마지막 페이지까지 이동해 보세요.
+버튼이 비활성화되나요?
