@@ -1,0 +1,82 @@
+● 수정 API 함수 생성
+  수정 API 함수는 writePost와 비슷하지만, axios.patch를 사용하고 id값을 추가로 받습니다.
+
+  [src/lib/api.js]
+  ...
+  export const editPost = ({id, title, body, tags}) => axios.patch(`/api/posts/${id}`, {title, body, tags});
+
+● 액션 생성
+  이제 이 함수를 호출하는 액션을 준비해 줍시다.
+
+  ★ 여기에서는 리듀서 부분(handleActions)에 따로 로직을 작성할 필요가 없습니다. ★
+  현재 어떤 포스트를 수정하는지 이미 알고 있으니까요.
+
+  [src/store/modulles/editor.js]
+  // action types
+  ...
+  const EDIT_POST = 'editor/EDIT_POST';
+
+  // action creators
+  ...
+  export const editPost = createAction(EDIT_POST, api.editPost);
+
+● EditorHeaderContainer 컴포넌트 수정
+  handleSubmit 부분에 id 값이 있으면 writePost가 아닌 editPost를 호출하도록 설정하세요. 그리고
+  렌더링 부분에서 id 값이 있을 때 isEdit라는 props를 true로 설정하겠습니다.
+
+  [src/containers/editor/EditorHeaderContainer.js]
+  ...
+  class EditorHeaderContainer extends Component {
+    ...
+    handleSubmit = async () => {
+      const { title, markdown, tags, EditorActions, history, location } = this.props;
+      ...
+      try {
+          // id가 존재하면 editPost 호출
+          const { id } = queryString.parse(location.search);
+          if (id) {
+            await EditorActions.editPost({id, ...post});
+            history.push(`/post/${id}`);
+          }
+
+          await EditorActions.writePost(post);
+          ...
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    render() {
+      const { handleGoBack, handleSubmit } = this;
+      const { id } = queryString.parse(this.props.location.search);
+
+      return (
+        <EditorHeader
+          onGoBack={handleGoBack}
+          onSubmit={handleSubmit}
+          isEdit={id ? true : false}
+        />
+      );
+    }
+  }
+  ...
+
+● 유저가 헷갈리지 않도록 EditorHeader에서 isEdit값이 true이면 [작성하기]가 아닌 [수정하기] 문구를 표시하도록 설정하세요.
+  [src/components/editor/EditorHeader/EditorHeader.js]
+  ...
+  const EditorHeader = ({onGoBack, onSubmit, isEdit}) => {
+    return (
+      <div className={cx('editor-header')}>
+        <div className={cx('back')}>
+          <Button onClick={onGoBack} theme="outline">뒤로가기</Button>
+        </div>
+        <div className={cx('submit')}>
+          <Button onClick={onSubmit} theme="outline">{isEdit ? '수정' : '작성'}하기</Button>
+        </div>
+      </div>
+    );
+  };
+  ...
+
+● 테스트
+  내용을 수정하고 [수정하기] 버튼을 눌러보세요. 내용이 변경된 포스트 페이지로 이동할 것입니다.
