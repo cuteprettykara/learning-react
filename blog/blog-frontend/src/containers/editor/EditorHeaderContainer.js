@@ -41,6 +41,7 @@ class EditorHeaderContainer extends Component {
         if (id) {
           await EditorActions.editPost({id, ...post});
           history.push(`/post/${id}`);
+          return;
         }
 
         await EditorActions.writePost(post);
