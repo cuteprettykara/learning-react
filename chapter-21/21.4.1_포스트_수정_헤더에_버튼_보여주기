@@ -1,0 +1,84 @@
+포스트를 읽는 페이지에서 [수정]버튼과 [삭제]버튼을 추가하겠습니다.
+
+* [수정] 버튼은 /editor?postId=ID 링크로 이동하게 설정하고,
+* [삭제] 버튼은 onRemove 함수를 props로 받아와 호출하게 설정하겠습니다.
+
+● HeaderContainer 컴포넌트 생성
+  우선 HeaderContainer를 만들어 포스트 페이지일 때는 포스트 아이디를 전달하도록 설정하세요.
+
+  [src/containers/common/HeaderContainer.js]
+  import React, { Component } from 'react';
+  import Header from 'components/common/Header';
+  import { withRouter } from 'react-router-dom';
+
+  class HeaderContainer extends Component {
+    handleRemove = () => {
+      // 미리 만들어 두기
+    }
+
+    render() {
+      const { handleRemove } = this;
+
+      const { match } = this.props;
+      const { id } = match.params;
+
+      return (
+        <div>
+          <Header
+            postId={id}
+            onRemove={handleRemove}
+          />
+        </div>
+      );
+    }
+  }
+
+  export default withRouter(HeaderContainer);
+
+  [아직은 리덕스와 연결하지 않았지만], 나중에 관리자 기능 로그인을 구현할 때 connect를 사용하므로
+  containers 디렉토리에 컨테이너 컴포넌트를 만들어 주었습니다.
+
+  이제 params에 id가 있을 때는 해당 값을 Header로 전달합니다.
+
+● PageTemplate에서 Header를 대체하세요.
+  [src/components/common/PageTemplate/PageTemplate.js]
+  ...
+  import HeaderContainer from 'containers/common/HeaderContainer';
+  ...
+
+  const PageTemplate = ({children}) => {
+    return (
+      <div className={cx('page-template')}>
+        <HeaderContainer />
+        <main>
+          {children}
+        </main>
+        <Footer />
+      </div>
+    );
+  };
+  ...
+
+● Header 컴포넌트를 열어 postId를 전달받았을 때 두 버튼이 나타나도록 설정하세요.
+  [src/components/common/Header/Header.js]
+  ...
+  const Header = ({postId, onRemove}) => {
+    return (
+      <header className={cx('header')}>
+        <div className={cx('header-content')}>
+          ...
+          <div className={cx('right')}>
+            {
+              // flex를 유지하려고 배열 형태로 렌더링합니다.
+              postId && [
+                <Button key="edit" theme="outline" to={`/editor?id=${postId}`}>수정</Button>,
+                <Button key="remove" theme="outline" onClick={onRemove}>삭제</Button>
+              ]
+            }
+            <Button theme="outline" to="/editor">새 포스트</Button>
+          </div>
+        </div>
+      </header>
+    );
+  };
+  ...

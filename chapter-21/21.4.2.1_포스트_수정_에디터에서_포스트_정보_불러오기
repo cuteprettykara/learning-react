@@ -1,0 +1,53 @@
+● editor 모듈 수정
+  [수정] 버튼을 눌러 에디터 페이지로 오면 id라는 쿼리가 설정됩니다.
+  에디터가 열릴 때 이 id값이 존재한다면 해당 포스트 내용을 불러와 editor 상태에 넣어 주겠습니다.
+
+  기존에 만들었던 getPost API 함수를 재활용하여 editor 모듈에 GET_POST 액션을 만드세요.
+  [src/store/modules/editor.js]
+  // action types
+  ...
+  const GET_POST = 'editor/GET_POST';
+
+  // action creators
+  ...
+  export const getPost = createAction(GET_POST, api.getPost);
+
+  // initial state
+  ...
+
+  // reducer
+  export default handleActions({
+    (...)
+    ...pender({
+      type: GET_POST,
+      onSuccess: (state, action) => {
+        const { title, body, tags } = action.payload.data;
+        return state.set('title', title)
+          .set('markdown', body)
+          .set('tags', tags.join(', ')); // 배열 -> ,로 구분된 문자열
+      }
+    })
+  }, initialState);
+
+● EditorHeaderContainer.js 컴포넌트를 여세요.
+  이 컴포넌트가 마운트될 때, location.search에서 id값을 파싱하여 해당 값이 있다면 EditorActions.getPost를
+  사용하여 포스트 정보를 가져오겠습니다.
+  이는 EditorActions.initialize로 에디터 상태를 초기화한 후 진행해야 합니다.
+  [src/containers/editor/EditorHeaderContainer.js]
+  ...
+  import queryString from 'query-string';
+
+  class EditorHeaderContainer extends Component {
+
+    componentDidMount() {
+      const { EditorActions, location } = this.props;
+      EditorActions.initialize(); // 에디터를 초기화합니다.
+
+      // 쿼리 파싱
+      const { id } = queryString.parse(location.search);
+      if (id) {
+        // id가 존재하면 포스트 불러오기
+        EditorActions.getPost(id);
+      }
+    }
+  (...)
